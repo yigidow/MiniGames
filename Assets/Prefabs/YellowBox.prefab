@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6549066713478710825}
   - component: {fileID: 6549066713478710999}
   - component: {fileID: 6549066713478710998}
+  - component: {fileID: -7681779938571985281}
   m_Layer: 5
   m_Name: YellowBox
   m_TagString: Yellow
@@ -77,6 +78,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &-7681779938571985281
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6549066713478710824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d5133de4b6e024aafc56f13daa1a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myBox: {fileID: 6549066713478710824}
+  shade: {fileID: 7009604839586973058}
+  isSelected: 0
+  myBros: []
 --- !u!1 &7009604839586973058
 GameObject:
   m_ObjectHideFlags: 0

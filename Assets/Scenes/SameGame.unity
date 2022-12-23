@@ -236,7 +236,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 132.9849}
+  m_SizeDelta: {x: 0, y: 135}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &705507993
 GameObject:
@@ -1921,11 +1921,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   index: 0
   Boxes:
-  - boxy: {fileID: 4401279702216750188, guid: ef1f94d0d3e15bc42b824a9d3749f82e, type: 3}
-  - boxy: {fileID: 6549066713478710824, guid: 43d584e8710358e42b04be6dec1898ec, type: 3}
-  - boxy: {fileID: 2540925829155433797, guid: fe5a474e34beb9a4d88826cb61797bc2, type: 3}
-  - boxy: {fileID: 4707780465758592255, guid: 0fb7f36470f19f34e8d27ff6415b8b7b, type: 3}
-  - boxy: {fileID: 5572901331106577496, guid: a85c19bf363553b4d8d3a517efaa4249, type: 3}
+  - {fileID: -7418599091778773001, guid: ef1f94d0d3e15bc42b824a9d3749f82e, type: 3}
+  - {fileID: -7681779938571985281, guid: 43d584e8710358e42b04be6dec1898ec, type: 3}
+  - {fileID: 2519479102180057461, guid: fe5a474e34beb9a4d88826cb61797bc2, type: 3}
+  - {fileID: -4124601726298921245, guid: 0fb7f36470f19f34e8d27ff6415b8b7b, type: 3}
+  - {fileID: -773513120487667770, guid: a85c19bf363553b4d8d3a517efaa4249, type: 3}
+  createdBoxes: []
   selectedBoxes: []
   redCount: 0
   redCountText: {fileID: 836655562}

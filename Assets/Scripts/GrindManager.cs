@@ -7,7 +7,6 @@ using TMPro;
 
 public class GrindManager : MonoBehaviour
 {
-    public int index;
     public int[,] Matrix;
     Transform parent;
     
@@ -40,12 +39,13 @@ public class GrindManager : MonoBehaviour
         parent = this.transform;
         CreateMatrix(colums, rows);
         UpdateBoxCountTexts();
+        UpdateBros();
     }
 
  
     void Update()
     {
-        //SelectBoxes();
+        SelectBoxes();
     }
     void CreateMatrix(int c, int r)
     {
@@ -56,18 +56,20 @@ public class GrindManager : MonoBehaviour
             {
                 Matrix[i, j] = Random.Range(0, 5);
                 CreateBoxes(i, j, Matrix[i, j]);
-                createdBoxes[0].xIndex = 10;
             }
         }
     }
 
     void CreateBoxes(int x, int y, int value)
     {
-        GameObject b = Instantiate(Boxes[value].boxy);
+        GameObject b = Instantiate(Boxes[value].myBox);
         b.gameObject.transform.SetParent(parent);
         b.transform.position = new Vector3(startXPos + (x * squareSize), startYPos + (y * squareSize));
 
-        createdBoxes.Add(Boxes[value]);
+        createdBoxes.Add(b.GetComponent<Box>());
+        b.GetComponent<Box>().indexX = x;
+        b.GetComponent<Box>().indexY = y;
+
         switch (b.gameObject.tag)
         {
             case "Red":
@@ -87,17 +89,48 @@ public class GrindManager : MonoBehaviour
                 break;
         }
     }
-
+    public void UpdateBros()
+    {
+        for (int i = 0; i < createdBoxes.Count-1; i++)
+        {
+            if (createdBoxes[i].gameObject.tag == createdBoxes[i+1].gameObject.tag)
+            {
+                createdBoxes[i].myBros.Add(createdBoxes[i + 1]);
+            }
+        }
+        for (int i = 0; i < createdBoxes.Count - 10; i++)
+        {
+            if (createdBoxes[i].gameObject.tag == createdBoxes[i + 10].gameObject.tag)
+            {
+                createdBoxes[i].myBros.Add(createdBoxes[i + 10]);
+            }
+        }
+        for (int i = createdBoxes.Count-1; i > 0; i--)
+        {
+            if (createdBoxes[i].gameObject.tag == createdBoxes[i-1].gameObject.tag && createdBoxes[i].indexX == createdBoxes[i - 1].indexX)
+            {
+                createdBoxes[i].myBros.Add(createdBoxes[i-1]);
+            }
+        }
+        //for (int i = createdBoxes.Count ; i > 10; i--)
+        //{
+        //    if (createdBoxes[i].gameObject.tag == createdBoxes[i - 10].gameObject.tag)
+        //    {
+        //        createdBoxes[i].myBros.Add(createdBoxes[i - 10]);
+        //    }
+        //}
+    }
     public void RefreshBoxes()
     {
         foreach (Box go in createdBoxes)
         {
-            Destroy(go.boxy);
+            Destroy(go.myBox);
         }
         createdBoxes.Clear();
         redCount = 0; blueCount = 0; yellowCount = 0; greenCount = 0; purpleCount = 0;
         CreateMatrix(colums, rows);
         UpdateBoxCountTexts();
+        UpdateBros();
     }
 
     void UpdateBoxCountTexts()
@@ -108,52 +141,34 @@ public class GrindManager : MonoBehaviour
         greenCountText.SetText(greenCount.ToString());
         purpleCountText.SetText(purpleCount.ToString());
     }
-    //void SelectBoxes()
-    //{
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        GameObject go = Reff.i.rayCast.GO();
-
-    //        switch (go.gameObject.tag)
-    //        {
-    //            case "Red":
-    //                index = createdBoxesGameobj.IndexOf(go);
-    //                selectedBoxes.Add(go);
-    //                GameObject child = go.gameObject.transform.GetChild(0).gameObject;
-    //                child.SetActive(false);
-    //                while (index < rows * colums && createdBoxesGameobj[index + rows].CompareTag(go.tag))
-    //                    if (createdBoxesGameobj[index + rows].CompareTag(go.tag))
-    //                    {
-    //                        selectedBoxes.Add(go);
-    //                        createdBoxesGameobj[index + rows].gameObject.transform.GetChild(0).gameObject.SetActive(false);
-    //                        index += rows;
-    //                    }
-    //                break;
-
-    //            case "Yellow":
-    //                index = createdBoxesGameobj.IndexOf(go);
-    //                    break;
-    //            case "Green":
-    //                index = createdBoxesGameobj.IndexOf(go);
-    //                break;
-    //            case "Blue":
-    //                index = createdBoxesGameobj.IndexOf(go);
-    //                break;
-    //            case "Purple":
-    //                index = createdBoxesGameobj.IndexOf(go);
-    //                break;
-
-    //        }
-    //    }
-    //}
-
-    [System.Serializable]
-    public class Box
+    void SelectBoxes()
     {
-        public GameObject boxy;
-        public int xIndex;
-        public int yIndex;
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject go = Reff.i.rayCast.GO();
+
+            if(go.GetComponent<Box>().myBros.Count > 0)
+            {
+                switch (go.gameObject.tag)
+                {
+                    case "Red":
+                        go.GetComponent<Box>().isSelected = true;
+                        break;
+                    case "Yellow":
+                        go.GetComponent<Box>().isSelected = true;
+                        break;
+                    case "Green":
+                        go.GetComponent<Box>().isSelected = true;
+                        break;
+                    case "Blue":
+                        go.GetComponent<Box>().isSelected = true;
+                        break;
+                    case "Purple":
+                        go.GetComponent<Box>().isSelected = true;
+                        break;
+                }
+            }
+        }
     }
 
 }
- 

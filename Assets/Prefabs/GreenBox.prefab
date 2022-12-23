@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2540925829155433796}
   - component: {fileID: 2540925829155433794}
   - component: {fileID: 2540925829155433795}
+  - component: {fileID: 2519479102180057461}
   m_Layer: 5
   m_Name: GreenBox
   m_TagString: Green
@@ -77,6 +78,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2519479102180057461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2540925829155433797}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d5133de4b6e024aafc56f13daa1a06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myBox: {fileID: 2540925829155433797}
+  shade: {fileID: 2717200608348508085}
+  isSelected: 0
+  myBros: []
 --- !u!1 &2717200608348508085
 GameObject:
   m_ObjectHideFlags: 0
