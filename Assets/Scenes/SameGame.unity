@@ -229,7 +229,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1663376301}
-  - {fileID: 1087400252}
   m_Father: {fileID: 2120539658}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1006,12 +1005,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1450947015}
-  m_Father: {fileID: 623792264}
+  m_Father: {fileID: 1663376301}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 40, y: -20}
+  m_AnchoredPosition: {x: -1597.7344, y: -20}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1087400253
@@ -1583,6 +1582,7 @@ RectTransform:
   - {fileID: 1138623893}
   - {fileID: 1600768643}
   - {fileID: 525188874}
+  - {fileID: 1087400252}
   m_Father: {fileID: 623792264}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1919,7 +1919,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c9e248202377534c871575865cd6e72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 0
   Boxes:
   - {fileID: -7418599091778773001, guid: ef1f94d0d3e15bc42b824a9d3749f82e, type: 3}
   - {fileID: -7681779938571985281, guid: 43d584e8710358e42b04be6dec1898ec, type: 3}
@@ -1927,6 +1926,7 @@ MonoBehaviour:
   - {fileID: -4124601726298921245, guid: 0fb7f36470f19f34e8d27ff6415b8b7b, type: 3}
   - {fileID: -773513120487667770, guid: a85c19bf363553b4d8d3a517efaa4249, type: 3}
   createdBoxes: []
+  destroyedBoxes: []
   selectedBoxes: []
   redCount: 0
   redCountText: {fileID: 836655562}

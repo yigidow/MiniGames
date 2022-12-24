@@ -6,16 +6,12 @@ public class Box : MonoBehaviour
 {
     public GameObject myBox;
     public GameObject shade;
-    public int indexX;
-    public int indexY;
 
     public bool isSelected;
 
+    //public BoxCollider2D boxCollder;
+
     public List<Box> myBros = new List<Box>();
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -28,6 +24,18 @@ public class Box : MonoBehaviour
                 bro.isSelected = true;
                 bro.shade.gameObject.SetActive(false);
             }
+        }
+        else
+        {
+            shade.gameObject.SetActive(true);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D  other)
+    {
+        if (other.gameObject.tag == this.gameObject.tag)
+        {
+            myBros.Add(other.gameObject.GetComponent<Box>());
         }
     }
 }

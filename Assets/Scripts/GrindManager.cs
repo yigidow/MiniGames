@@ -12,6 +12,7 @@ public class GrindManager : MonoBehaviour
     
     public List<Box> Boxes = new List<Box>();
     public List<Box> createdBoxes = new List<Box>();
+    public List<Box> destroyedBoxes = new List<Box>();
 
     public List<GameObject> selectedBoxes = new List<GameObject>();
 
@@ -39,13 +40,19 @@ public class GrindManager : MonoBehaviour
         parent = this.transform;
         CreateMatrix(colums, rows);
         UpdateBoxCountTexts();
-        UpdateBros();
     }
 
  
     void Update()
     {
-        SelectBoxes();
+        if (Input.GetMouseButtonDown(0))
+        {
+            GameObject go = Reff.i.rayCast.GO();
+            if (go.gameObject.tag == "Red" || go.gameObject.tag == "Yellow" || go.gameObject.tag == "Green" || go.gameObject.tag == "Blue" || go.gameObject.tag == "Purple")
+            {
+                SelectBoxes(go);
+            }
+        }
     }
     void CreateMatrix(int c, int r)
     {
@@ -67,8 +74,6 @@ public class GrindManager : MonoBehaviour
         b.transform.position = new Vector3(startXPos + (x * squareSize), startYPos + (y * squareSize));
 
         createdBoxes.Add(b.GetComponent<Box>());
-        b.GetComponent<Box>().indexX = x;
-        b.GetComponent<Box>().indexY = y;
 
         switch (b.gameObject.tag)
         {
@@ -89,37 +94,7 @@ public class GrindManager : MonoBehaviour
                 break;
         }
     }
-    public void UpdateBros()
-    {
-        for (int i = 0; i < createdBoxes.Count-1; i++)
-        {
-            if (createdBoxes[i].gameObject.tag == createdBoxes[i+1].gameObject.tag)
-            {
-                createdBoxes[i].myBros.Add(createdBoxes[i + 1]);
-            }
-        }
-        for (int i = 0; i < createdBoxes.Count - 10; i++)
-        {
-            if (createdBoxes[i].gameObject.tag == createdBoxes[i + 10].gameObject.tag)
-            {
-                createdBoxes[i].myBros.Add(createdBoxes[i + 10]);
-            }
-        }
-        for (int i = createdBoxes.Count-1; i > 0; i--)
-        {
-            if (createdBoxes[i].gameObject.tag == createdBoxes[i-1].gameObject.tag && createdBoxes[i].indexX == createdBoxes[i - 1].indexX)
-            {
-                createdBoxes[i].myBros.Add(createdBoxes[i-1]);
-            }
-        }
-        //for (int i = createdBoxes.Count ; i > 10; i--)
-        //{
-        //    if (createdBoxes[i].gameObject.tag == createdBoxes[i - 10].gameObject.tag)
-        //    {
-        //        createdBoxes[i].myBros.Add(createdBoxes[i - 10]);
-        //    }
-        //}
-    }
+
     public void RefreshBoxes()
     {
         foreach (Box go in createdBoxes)
@@ -130,7 +105,6 @@ public class GrindManager : MonoBehaviour
         redCount = 0; blueCount = 0; yellowCount = 0; greenCount = 0; purpleCount = 0;
         CreateMatrix(colums, rows);
         UpdateBoxCountTexts();
-        UpdateBros();
     }
 
     void UpdateBoxCountTexts()
@@ -141,14 +115,16 @@ public class GrindManager : MonoBehaviour
         greenCountText.SetText(greenCount.ToString());
         purpleCountText.SetText(purpleCount.ToString());
     }
-    void SelectBoxes()
+    void SelectBoxes(GameObject go)
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            GameObject go = Reff.i.rayCast.GO();
-
-            if(go.GetComponent<Box>().myBros.Count > 0)
+        if (go.GetComponent<Box>().myBros.Count > 0) 
             {
+            if (!go.GetComponent<Box>().isSelected == true)
+            {
+                foreach (Box boxy in createdBoxes)
+                {
+                    boxy.isSelected = false;
+                }
                 switch (go.gameObject.tag)
                 {
                     case "Red":
@@ -168,6 +144,29 @@ public class GrindManager : MonoBehaviour
                         break;
                 }
             }
+            else
+            {
+                DestroySelectedBoxes();
+            }          
+        }
+    }
+    void DestroySelectedBoxes()
+    {
+        foreach(Box boxy in createdBoxes)
+        {
+            if (boxy.isSelected)
+            {
+                destroyedBoxes.Add(boxy);
+                Destroy(boxy.myBox);
+            }
+        }
+        UpdateBoard();                                   
+    }
+    void UpdateBoard()
+    {
+        foreach(Box boxy in createdBoxes)
+        {
+            Debug.Log("bilmem");
         }
     }
 
