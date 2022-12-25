@@ -187,13 +187,13 @@ public class GrindManager : MonoBehaviour
         deletedBoxes.Clear();
         UpdateBoxCountTexts();
         scoreCountText.SetText(scoreCount.ToString()); ;
+        UpdateBoard(); 
     }
-    void UpdateBoard()  
+    void UpdateBoard()
     {
-        foreach(Box boxy in createdBoxes)
-        {
-            Debug.Log("bilmem");
-        }
+        //foreach(Box boxy in createdBoxes)
+        //{
+        //    boxy.myBox.GetComponent<Rigidbody2D>().AddForce(transform.up)
+        // }
     }
-
 }

@@ -748,6 +748,7 @@ GameObject:
   - component: {fileID: 781356778}
   - component: {fileID: 781356780}
   - component: {fileID: 781356779}
+  - component: {fileID: 781356781}
   m_Layer: 5
   m_Name: BackGroundGame
   m_TagString: Untagged
@@ -813,6 +814,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 781356777}
   m_CullTransparentMesh: 1
+--- !u!68 &781356781
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781356777}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: 839.5433, y: -390.41058}
+  - {x: -865.9216, y: -390.3528}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!1 &819217715
 GameObject:
   m_ObjectHideFlags: 0
@@ -2287,7 +2310,6 @@ MonoBehaviour:
   purpleCount: 0
   purpleCountText: {fileID: 825066681}
   scoreCount: 0
-  k: 0
   scoreCountText: {fileID: 286058065}
 --- !u!1 &2120539657
 GameObject:
