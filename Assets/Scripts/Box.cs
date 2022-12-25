@@ -22,7 +22,7 @@ public class Box : MonoBehaviour
             foreach (Box bro in myBros)
             {
                 bro.isSelected = true;
-                bro.shade.gameObject.SetActive(false);
+                //bro.shade.gameObject.SetActive(false);
             }
         }
         else

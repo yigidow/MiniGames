@@ -12,9 +12,8 @@ public class GrindManager : MonoBehaviour
     
     public List<Box> Boxes = new List<Box>();
     public List<Box> createdBoxes = new List<Box>();
-    public List<Box> destroyedBoxes = new List<Box>();
 
-    public List<GameObject> selectedBoxes = new List<GameObject>();
+    public List<Box> deletedBoxes = new List<Box>();
 
     int startXPos = 105;
     int startYPos = 180;
@@ -34,6 +33,8 @@ public class GrindManager : MonoBehaviour
     [HideInInspector] public int purpleCount;
     [HideInInspector]public TMP_Text purpleCountText;
 
+    public int scoreCount;
+    public TMP_Text scoreCountText;
 
     void Start()
     {
@@ -152,17 +153,42 @@ public class GrindManager : MonoBehaviour
     }
     void DestroySelectedBoxes()
     {
-        foreach(Box boxy in createdBoxes)
+        for(int i= 0; i < createdBoxes.Count; i++)
         {
-            if (boxy.isSelected)
+            if (createdBoxes[i].isSelected)
             {
-                destroyedBoxes.Add(boxy);
-                Destroy(boxy.myBox);
+                deletedBoxes.Add(createdBoxes[i]);
             }
+        } 
+        foreach(Box go in deletedBoxes)
+        {
+            switch (go.gameObject.tag)
+            {
+                case "Red":
+                    redCount--;
+                    break;
+                case "Yellow":
+                    yellowCount--;
+                    break;
+                case "Green":
+                    greenCount--;
+                    break;
+                case "Blue":
+                    blueCount--;
+                    break;
+                case "Purple":
+                    purpleCount--;
+                    break;
+            }
+            createdBoxes.Remove(go);
+            Destroy(go.myBox);
         }
-        UpdateBoard();                                   
+        scoreCount += ((deletedBoxes.Count)* (deletedBoxes.Count - 1));
+        deletedBoxes.Clear();
+        UpdateBoxCountTexts();
+        scoreCountText.SetText(scoreCount.ToString()); ;
     }
-    void UpdateBoard()
+    void UpdateBoard()  
     {
         foreach(Box boxy in createdBoxes)
         {
