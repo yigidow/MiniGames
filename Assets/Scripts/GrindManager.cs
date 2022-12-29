@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +12,10 @@ public class GrindManager : MonoBehaviour
     
     public List<Box> Boxes = new List<Box>();
     public List<Box> createdBoxes = new List<Box>();
-
     public List<Box> deletedBoxes = new List<Box>();
 
-    int startXPos = 105;
-    int startYPos = 180;
+    int startXPos = 115;
+    int startYPos = 140;
     int squareSize = 85;
 
     int colums = 20;
@@ -186,14 +185,18 @@ public class GrindManager : MonoBehaviour
         scoreCount += ((deletedBoxes.Count)* (deletedBoxes.Count - 1));
         deletedBoxes.Clear();
         UpdateBoxCountTexts();
-        scoreCountText.SetText(scoreCount.ToString()); ;
-        UpdateBoard(); 
+        scoreCountText.SetText(scoreCount.ToString());
+        //UpdateBoard();
     }
-    void UpdateBoard()
+    public void UpdateBoard()
     {
-        //foreach(Box boxy in createdBoxes)
-        //{
-        //    boxy.myBox.GetComponent<Rigidbody2D>().AddForce(transform.up)
-        // }
-    }
+        int nullCount = 0;
+
+        foreach (Box boxy in createdBoxes)
+        {
+            boxy.myRigidbody.AddForce(new Vector2(0,-squareSize), ForceMode2D.Impulse);
+            //boxy.myRigidbody.AddForce(new Vector2(-2*squareSize,0), ForceMode2D.Impulse);
+        }
+    } 
 }
+    

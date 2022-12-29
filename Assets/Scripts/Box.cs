@@ -7,6 +7,8 @@ public class Box : MonoBehaviour
     public GameObject myBox;
     public GameObject shade;
 
+    public Rigidbody2D myRigidbody;
+
     public bool isSelected;
 
     //public BoxCollider2D boxCollder;

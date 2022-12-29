@@ -94,6 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myBox: {fileID: 6549066713478710824}
   shade: {fileID: 7009604839586973058}
+  myRigidbody: {fileID: 6183353488241397961}
   isSelected: 0
   myBros: []
 --- !u!50 &6183353488241397961
@@ -111,9 +112,9 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 5
+  m_GravityScale: 1
   m_Material: {fileID: 0}
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
@@ -142,16 +143,16 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 43.2246, y: 17.14917}
-      - {x: 43.002075, y: 31.82959}
+    - - {x: 20.9515, y: 3.7854004}
+      - {x: 15.637978, y: 8.283691}
       - {x: 28.119225, y: 42.136597}
       - {x: -32.081444, y: 41.991577}
-      - {x: -42.11672, y: 23.605469}
-      - {x: -41.63025, y: -21.433167}
+      - {x: -41.98084, y: 11.942261}
+      - {x: -41.96215, y: -8.13385}
       - {x: -31.994629, y: -43.017517}
       - {x: 28.003952, y: -43.00171}
-      - {x: 42.955177, y: -28.075378}
-      - {x: 43.004623, y: 0.19720078}
+      - {x: 43.00831, y: -7.9849854}
+      - {x: 43.004623, y: 11.672054}
   m_UseDelaunayMesh: 0
 --- !u!1 &7009604839586973058
 GameObject:
