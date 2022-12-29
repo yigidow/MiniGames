@@ -194,7 +194,7 @@ public class GrindManager : MonoBehaviour
 
         foreach (Box boxy in createdBoxes)
         {
-            boxy.myRigidbody.AddForce(new Vector2(0,-squareSize), ForceMode2D.Impulse);
+            boxy.myRigidbody.AddRelativeForce(new Vector2(0,-2*squareSize), ForceMode2D.Impulse);
             //boxy.myRigidbody.AddForce(new Vector2(-2*squareSize,0), ForceMode2D.Impulse);
         }
     } 
