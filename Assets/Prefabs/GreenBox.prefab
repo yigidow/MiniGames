@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 2540925829155433794}
   - component: {fileID: 2540925829155433795}
   - component: {fileID: 2519479102180057461}
-  - component: {fileID: -2681098449191511031}
   - component: {fileID: 7981924684110916006}
+  - component: {fileID: 7833263902117359083}
   m_Layer: 5
   m_Name: GreenBox
   m_TagString: Green
@@ -94,30 +94,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myBox: {fileID: 2540925829155433797}
   shade: {fileID: 2717200608348508085}
-  myRigidbody: {fileID: -2681098449191511031}
+  myRigidbody: {fileID: 7833263902117359083}
   isSelected: 0
+  xPos: 0
+  yPos: 0
   myBros: []
---- !u!50 &-2681098449191511031
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2540925829155433797}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 1
-  m_UseAutoMass: 1
-  m_Mass: 25
-  m_LinearDrag: 0
-  m_AngularDrag: 0
-  m_GravityScale: 150
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 1
-  m_Constraints: 4
 --- !u!58 &7981924684110916006
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -134,6 +115,27 @@ CircleCollider2D:
   m_Offset: {x: 42.5, y: -42.5}
   serializedVersion: 2
   m_Radius: 42.5
+--- !u!50 &7833263902117359083
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2540925829155433797}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 1
+  m_Mass: 100
+  m_LinearDrag: 0
+  m_AngularDrag: 0
+  m_GravityScale: 100
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
 --- !u!1 &2717200608348508085
 GameObject:
   m_ObjectHideFlags: 0

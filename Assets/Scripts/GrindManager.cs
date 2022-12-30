@@ -12,6 +12,9 @@ public class GrindManager : MonoBehaviour
     
     public List<Box> Boxes = new List<Box>();
     public List<Box> createdBoxes = new List<Box>();
+
+    public GameObject[,] boxMatrix;
+
     public List<Box> deletedBoxes = new List<Box>();
 
     int startXPos = 115;
@@ -57,6 +60,7 @@ public class GrindManager : MonoBehaviour
     void CreateMatrix(int c, int r)
     {
         Matrix = new int [colums, rows];
+        boxMatrix = new GameObject[colums, rows];
         for (int i = 0; i < c; i++)
         {
             for(int j = 0; j < r; j++)
@@ -72,8 +76,11 @@ public class GrindManager : MonoBehaviour
         GameObject b = Instantiate(Boxes[value].myBox);
         b.gameObject.transform.SetParent(parent);
         b.transform.position = new Vector3(startXPos + (x * squareSize), startYPos + (y * squareSize));
-
+        b.GetComponent<Box>().xPos = startXPos + (x * squareSize);
+        b.GetComponent<Box>().yPos = startYPos + (y * squareSize);
         createdBoxes.Add(b.GetComponent<Box>());
+
+        boxMatrix[x, y] = b;
 
         switch (b.gameObject.tag)
         {
@@ -188,15 +195,17 @@ public class GrindManager : MonoBehaviour
         scoreCountText.SetText(scoreCount.ToString());
         //UpdateBoard();
     }
-    public void UpdateBoard()
-    {
-        int nullCount = 0;
-
-        foreach (Box boxy in createdBoxes)
-        {
-            boxy.myRigidbody.velocity = new Vector2(0,-2*squareSize);
-            //boxy.myRigidbody.AddForce(new Vector2(-2*squareSize,0), ForceMode2D.Impulse);
-        }
-    } 
+    //public void UpdateBoard()
+    //{
+    //    int nullCount = 0;
+    //    int i = 0;
+    //    while (i < colums)
+    //    {
+    //        for (int j = 0; j < rows; j++)
+    //        {
+    //            if()
+    //        }
+    //    }
+    //}
 }
     

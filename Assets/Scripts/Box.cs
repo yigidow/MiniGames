@@ -11,7 +11,8 @@ public class Box : MonoBehaviour
 
     public bool isSelected;
 
-    //public BoxCollider2D boxCollder;
+    public int xPos;
+    public int yPos;
 
     public List<Box> myBros = new List<Box>();
 
@@ -31,12 +32,16 @@ public class Box : MonoBehaviour
         {
             shade.gameObject.SetActive(true);
         }
+
+        //gameObject.transform.position = new Vector3(xPos, yPos, transform.position.z);
     }
 
     void OnCollisionEnter2D(Collision2D  other)
     {
+     
         if (other.gameObject.tag == this.gameObject.tag)
         {
+            
             myBros.Add(other.gameObject.GetComponent<Box>());
         }
     }
