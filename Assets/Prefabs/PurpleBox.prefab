@@ -94,7 +94,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myBox: {fileID: 5572901331106577496}
   shade: {fileID: 6563084284609838205}
-  myRigidbody: {fileID: 3138338264694737311}
   isSelected: 0
   xPos: 0
   yPos: 0
@@ -125,13 +124,13 @@ Rigidbody2D:
   m_GameObject: {fileID: 5572901331106577496}
   m_BodyType: 0
   m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 1
-  m_Mass: 100
+  m_UseFullKinematicContacts: 1
+  m_UseAutoMass: 0
+  m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 100
-  m_Material: {fileID: 0}
+  m_GravityScale: 50
+  m_Material: {fileID: 6200000, guid: 0c8bdc1632a1e3f4ebf3563e407e14ce, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0

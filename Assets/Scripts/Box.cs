@@ -7,7 +7,7 @@ public class Box : MonoBehaviour
     public GameObject myBox;
     public GameObject shade;
 
-    public Rigidbody2D myRigidbody;
+    //public Rigidbody2D myRigidbody;
 
     public bool isSelected;
 
@@ -43,6 +43,7 @@ public class Box : MonoBehaviour
         {
             
             myBros.Add(other.gameObject.GetComponent<Box>());
+            gameObject.GetComponent<Rigidbody2D>().velocity = new  Vector2(0,0);
         }
     }
 }
