@@ -304,8 +304,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1850086615}
   - {fileID: 1717019015}
+  - {fileID: 1850086615}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -356,7 +356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_HorizontalAxis: Horizontal
   m_VerticalAxis: Vertical
   m_SubmitButton: Submit
@@ -435,7 +434,7 @@ AudioSource:
   m_GameObject: {fileID: 1717019014}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 4223612769304225025, guid: 0089b0cca0053114989ecc319be4f24f, type: 2}
+  OutputAudioMixerGroup: {fileID: -6293870605803647954, guid: 2d07489b3a5c9cb4f9ef0b7979eae08f, type: 2}
   m_audioClip: {fileID: 8300000, guid: 7d386826bf6e6744bbaf1181333c732f, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -563,8 +562,8 @@ AudioSource:
   m_GameObject: {fileID: 1850086614}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 8667016116640337426, guid: 0089b0cca0053114989ecc319be4f24f, type: 2}
-  m_audioClip: {fileID: 8300000, guid: 5b492cc73fcd1559b89583e624c2d992, type: 3}
+  OutputAudioMixerGroup: {fileID: -3253036923047611180, guid: 2d07489b3a5c9cb4f9ef0b7979eae08f, type: 2}
+  m_audioClip: {fileID: 8300000, guid: 1f5d46e96f2a3fa479c4b81d43441705, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -650,20 +649,17 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!1001 &6256499159847138444
+--- !u!1001 &2028886776
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6256499158265185613, guid: 9cf320965ffda1948aa689b8ca36ecb4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6256499158436801953, guid: 9cf320965ffda1948aa689b8ca36ecb4, type: 3}
       propertyPath: m_Name
-      value: Register/Login Canvas
+      value: Register_Login Canvas
       objectReference: {fileID: 0}
     - target: {fileID: 6256499158436801981, guid: 9cf320965ffda1948aa689b8ca36ecb4, type: 3}
       propertyPath: m_Pivot.x
@@ -750,4 +746,5 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 9cf320965ffda1948aa689b8ca36ecb4, type: 3}

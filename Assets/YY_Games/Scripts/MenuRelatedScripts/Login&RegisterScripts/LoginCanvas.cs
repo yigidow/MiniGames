@@ -140,9 +140,6 @@ namespace YY_Games_Scripts
                     print(message: "Login was succesfull");
                     StartCoroutine(DisplayMessages("Login was succesfull"));
                     StartCoroutine(Routine_RegistrationSuccesful());
-
-                    //loginMenuLoginButton.interactable = true;
-                    //loginMenuBackButton.interactable = true;
                 },
                 errorCallback:error =>
                 {
@@ -264,10 +261,10 @@ namespace YY_Games_Scripts
                 {
                     print(message: "Registration result succeeded");
                     SetupWinLossDataOnRegistration();
-                    //StartCoroutine(DisplayMessages("Registration was succesfull"));
-                    //StartCoroutine(Routine_RegistrationSuccesful());
+                    StartCoroutine(DisplayMessages("Registration was succesfull"));
+                    StartCoroutine(Routine_RegistrationSuccesful());
 
-                    //UpdateContactEmail();
+                    UpdateContactEmail();
                 },
                 errorCallback: error =>
                 {
@@ -340,7 +337,7 @@ namespace YY_Games_Scripts
             var recoveryRequest = new SendAccountRecoveryEmailRequest
             {
                 Email = accountRecoveryEmailAddress,
-                TitleId = "7F20F"
+                TitleId = "E4C04"
             };
 
             PlayFabClientAPI.SendAccountRecoveryEmail(
