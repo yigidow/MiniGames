@@ -70,7 +70,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6ef1969ea54242e438adfb8345608b64, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 12e424a8674ba234097ed450a7b12503, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -95,6 +95,7 @@ MonoBehaviour:
   myBox: {fileID: 2540925829155433797}
   shade: {fileID: 2717200608348508085}
   isSelected: 0
+  gotMyBros: 0
   xPos: 0
   yPos: 0
   myBros: []
@@ -129,12 +130,12 @@ Rigidbody2D:
   m_Mass: 0.1
   m_LinearDrag: 0
   m_AngularDrag: 0
-  m_GravityScale: 50
-  m_Material: {fileID: 6200000, guid: 0c8bdc1632a1e3f4ebf3563e407e14ce, type: 2}
+  m_GravityScale: 20
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 7
 --- !u!1 &2717200608348508085
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6ef1969ea54242e438adfb8345608b64, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 12e424a8674ba234097ed450a7b12503, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

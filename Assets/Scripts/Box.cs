@@ -10,6 +10,7 @@ public class Box : MonoBehaviour
     //public Rigidbody2D myRigidbody;
 
     public bool isSelected;
+    public bool gotMyBros;
 
     public int xPos;
     public int yPos;
@@ -33,7 +34,7 @@ public class Box : MonoBehaviour
             shade.gameObject.SetActive(true);
         }
 
-        //gameObject.transform.position = new Vector3(xPos, yPos, transform.position.z);
+        gameObject.transform.position = new Vector3(xPos, yPos, transform.position.z);
     }
 
     void OnCollisionEnter2D(Collision2D  other)
@@ -41,9 +42,8 @@ public class Box : MonoBehaviour
      
         if (other.gameObject.tag == this.gameObject.tag)
         {
-            
             myBros.Add(other.gameObject.GetComponent<Box>());
-            gameObject.GetComponent<Rigidbody2D>().velocity = new  Vector2(0,0);
+            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(0,0);
         }
     }
 }

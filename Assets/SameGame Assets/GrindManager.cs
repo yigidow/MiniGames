@@ -9,11 +9,11 @@ public class GrindManager : MonoBehaviour
 {
     public int[,] Matrix;
     Transform parent;
-    
+
     public List<Box> Boxes = new List<Box>();
     public List<Box> createdBoxes = new List<Box>();
 
-    public GameObject[,] boxMatrix;
+    //public GameObject[,] boxMatrix;
 
     public List<Box> deletedBoxes = new List<Box>();
 
@@ -33,7 +33,7 @@ public class GrindManager : MonoBehaviour
     [HideInInspector] public int blueCount;
     [HideInInspector] public TMP_Text blueCountText;
     [HideInInspector] public int purpleCount;
-    [HideInInspector]public TMP_Text purpleCountText;
+    [HideInInspector] public TMP_Text purpleCountText;
 
     public int scoreCount;
     public TMP_Text scoreCountText;
@@ -45,7 +45,7 @@ public class GrindManager : MonoBehaviour
         UpdateBoxCountTexts();
     }
 
- 
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
@@ -59,11 +59,11 @@ public class GrindManager : MonoBehaviour
     }
     void CreateMatrix(int c, int r)
     {
-        Matrix = new int [colums, rows];
-        boxMatrix = new GameObject[colums, rows];
+        Matrix = new int[colums, rows];
+        //boxMatrix = new GameObject[colums, rows];
         for (int i = 0; i < c; i++)
         {
-            for(int j = 0; j < r; j++)
+            for (int j = 0; j < r; j++)
             {
                 Matrix[i, j] = Random.Range(0, 5);
                 CreateBoxes(i, j, Matrix[i, j]);
@@ -80,7 +80,7 @@ public class GrindManager : MonoBehaviour
         b.GetComponent<Box>().yPos = startYPos + (y * squareSize);
         createdBoxes.Add(b.GetComponent<Box>());
 
-        boxMatrix[x, y] = b;
+        //boxMatrix[x, y] = b;
 
         switch (b.gameObject.tag)
         {
@@ -124,8 +124,8 @@ public class GrindManager : MonoBehaviour
     }
     void SelectBoxes(GameObject go)
     {
-        if (go.GetComponent<Box>().myBros.Count > 0) 
-            {
+        if (go.GetComponent<Box>().myBros.Count > 0)
+        {
             if (!go.GetComponent<Box>().isSelected == true)
             {
                 foreach (Box boxy in createdBoxes)
@@ -154,19 +154,19 @@ public class GrindManager : MonoBehaviour
             else
             {
                 DestroySelectedBoxes();
-            }          
+            }
         }
     }
     void DestroySelectedBoxes()
     {
-        for(int i= 0; i < createdBoxes.Count; i++)
+        for (int i = 0; i < createdBoxes.Count; i++)
         {
             if (createdBoxes[i].isSelected)
             {
                 deletedBoxes.Add(createdBoxes[i]);
             }
-        } 
-        foreach(Box go in deletedBoxes)
+        }
+        foreach (Box go in deletedBoxes)
         {
             switch (go.gameObject.tag)
             {
@@ -189,23 +189,19 @@ public class GrindManager : MonoBehaviour
             createdBoxes.Remove(go);
             Destroy(go.myBox);
         }
-        scoreCount += ((deletedBoxes.Count)* (deletedBoxes.Count - 1));
+        scoreCount += ((deletedBoxes.Count) * (deletedBoxes.Count - 1));
         deletedBoxes.Clear();
         UpdateBoxCountTexts();
         scoreCountText.SetText(scoreCount.ToString());
         //UpdateBoard();
     }
-    //public void UpdateBoard()
-    //{
-    //    int nullCount = 0;
-    //    int i = 0;
-    //    while (i < colums)
-    //    {
-    //        for (int j = 0; j < rows; j++)
-    //        {
-    //            if()
-    //        }
-    //    }
-    //}
+    public void UpdateBoard()
+    {
+        for (int i = 0; i < colums; i++)
+        {
+            for (int j = 0; j < rows; j++)
+            {
+            }
+        }
+    }
 }
-    
