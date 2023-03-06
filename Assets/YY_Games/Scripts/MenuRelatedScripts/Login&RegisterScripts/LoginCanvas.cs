@@ -423,7 +423,7 @@ namespace YY_Games_Scripts
             //Setting PlayFab ID 
             if (string.IsNullOrEmpty(PlayFabSettings.TitleId))
             {
-                PlayFabSettings.TitleId = "7F20F";
+                PlayFabSettings.TitleId = "E4C04";
             }
         }
         #endregion
