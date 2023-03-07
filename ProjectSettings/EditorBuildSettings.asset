@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/YY_Games/Scenes/Main Menu Scene.unity
     guid: 9254542c848d83c46995d933838ff77f
+  - enabled: 1
+    path: Assets/YY_Games/Scenes/SinglePlayer Menu Scene.unity
+    guid: 859c9181ab485fa4e8d818f800c164fe
+  - enabled: 1
+    path: Assets/YY_Games/Scenes/SinglePlayer Level Scene.unity
+    guid: 47e3276b39c907042b1ab24ba08748b6
   m_configObjects: {}

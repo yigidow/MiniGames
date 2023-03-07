@@ -92,7 +92,7 @@
 //        {
 //            multiSceneIsLoaded = true;
 
-//            if (PhotonNetwork.IsMasterClient ==false)
+//            if (PhotonNetwork.IsMasterClient == false)
 //            {
 //                return;
 //            }

@@ -20,6 +20,7 @@ namespace YY_Games_Scripts
         [SerializeField] private GameObject friendRequetsMenuRef;
         [SerializeField] private GameObject searchPlayerToAddMenuRef;
         [Header("Main Menu Buttons")]
+        [SerializeField] private Button soloPlayButton;
         [SerializeField] private Button goOnlineButton;
         [SerializeField] private Button leaderBoardSelectionButton;
         [SerializeField] private Button friendListButton;
@@ -43,9 +44,14 @@ namespace YY_Games_Scripts
         [SerializeField] private Button searchPlayerToAddMenuBackButton;
         #endregion
         #region Main Menu Button Functions
-        private void OnMainMenuGoOnlineButtonClick()
+        private void OnMainMenuSoloPlayButtonClick()
         {
             SceneManager.LoadScene(2, LoadSceneMode.Single);
+            //AudioManagerForMainMenu.instance.PlayClickSound();
+        }
+        private void OnMainMenuGoOnlineButtonClick()
+        {
+            SceneManager.LoadScene(3, LoadSceneMode.Single);
             AudioManagerForMainMenu.instance.PlayClickSound();
         }
         private void OnMainMenuLeaderBoardButtonClick()
@@ -63,16 +69,18 @@ namespace YY_Games_Scripts
         private void SetUpMainMenuButtons()
 
         {
-            //Arrenging Multiplayrt Menu Buttons
+            //Assign
+            soloPlayButton.onClick.AddListener(OnMainMenuSoloPlayButtonClick);
+            //Assign Multiplayrt Menu Buttons
             goOnlineButton.onClick.AddListener(OnMainMenuGoOnlineButtonClick);
-            //Arrenging LeaderBoard Selection Menu Buttons
+            //Assign LeaderBoard Selection Menu Buttons
             leaderBoardSelectionButton.onClick.AddListener(OnMainMenuLeaderBoardButtonClick);
             leaderBoardSelectionBackButton.onClick.AddListener(OnLeaderboardSelectionMenuBackButtonClick);
             leaderBoardSelectionWinRecordButton.onClick.AddListener(OnLeaderBoardSelectionMenuWinRecordButtonClick);
             leaderBoardSelectionTimeRecordButton.onClick.AddListener(OnLeaderBoardSelectionMenuTimeRecordButtonClick);
             leaderBoardSelectionWinRecordBackButton.onClick.AddListener(OnWinLeaderBoardBackButtonClick);
             leaderBoardSelectionTimeRecordBackButton.onClick.AddListener(OnTimeLeaderBoardBackButtonClick);
-            //Arrenging FriendList Buttons
+            //Assign FriendList Buttons
             friendListButton.onClick.AddListener(OnMainMenuFriendListButtonClick);
             friendListMenuBackButton.onClick.AddListener(OnFriendListMenuBackButtonClick);
             playerFriendRequestButton.onClick.AddListener(OnFriendListMenuFriendRequestsButtonClick);
