@@ -7,28 +7,35 @@ namespace YY_Games_Scripts
     public class Board : MonoBehaviour
     {
         #region Variables and References
-        [Header("Board Components")]
+        [Header("Board Values")]
         [SerializeField] private BoxCollider2D border;
+        [SerializeField] private int rows = 20;
+        [SerializeField] private int columns = 10;
+        [SerializeField] private int difficulty;
+        [SerializeField] private int density;
+
+        [Header("Board Grid Components")]
         [SerializeField] private GameObject gridCell;
         [SerializeField] private Transform gridStartPos;
+        [SerializeField] private GameObject gridParent;
         [SerializeField] private List<GameObject> boardGrid = new List<GameObject>();
-
-        [Header("Board Values")]
-        private int rows = 20;
-        private int columns = 10;
-        private int difficulty = SinglePlaySettingsMenu.instance.gameDifficulty;   
-        private int density = SinglePlaySettingsMenu.instance.densityOfBoard;
 
         [Header("Block Variables")]
         [SerializeField] private List<GameObject> blocks = new List<GameObject>();
         [SerializeField] private int blockCount = 25;
         [SerializeField] private int boxColorCount;
-        [SerializeField] private GameObject blockToCreate;
+
+        [Header("Spawned Piece Variables")]
+        [SerializeField] private Piece pieceToSpawn;
+        [SerializeField] private Transform pieceSpawnPos;
+
         #endregion
         #region Functions to set up the board at start
 
         private void SetUpGameSettings()
         {
+            difficulty = PlayerPrefs.GetInt("gameDifficulty");
+            density = PlayerPrefs.GetInt("densityOfBoard");
             switch (density)
             {
                 case 1:
@@ -82,7 +89,7 @@ namespace YY_Games_Scripts
                     {
                         randomCounter = 0;
                     }
-                    if(randomCounter == 3)
+                    if(randomCounter == 2)
                     {
                         randomColor++;
                         if (randomColor >= boxColorCount)
@@ -91,13 +98,15 @@ namespace YY_Games_Scripts
                         }
                     }
 
+                    //Setting the position of grid
                     Vector2 tempPos = new Vector2(i, j);
-                    GameObject grid = Instantiate(gridCell, (Vector2)gridStartPos.position + tempPos, Quaternion.identity, this.gameObject.transform);
+                    GameObject grid = Instantiate(gridCell, (Vector2)gridStartPos.position + tempPos, Quaternion.identity, gridParent.transform);
 
                     grid.GetComponent<Grid>().positionOfGrid.Set(grid.transform.position.x, grid.transform.position.y, grid.transform.position.z);
                     grid.gameObject.name = "("+ i + "," + j +")";
                     boardGrid.Add(grid);
 
+                    //Setting the grid if it has a block or not
                     if(rand == 0)
                     {
                         grid.GetComponent<Grid>().hasBlock = false;
@@ -127,8 +136,22 @@ namespace YY_Games_Scripts
                 }
             }
         }
+        private void SpawnPiece()
+        {
+            //Spawn the piece
+            GameObject spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2) pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
+
+            //Set piece blocks randomly
+            for(int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
+            {
+                int rand = Random.Range(0, boxColorCount);
+                spawnedPiece.GetComponent<Piece>().blocksInPiece[i] = blocks[rand];
+            }
+            Debug.Log(spawnedPiece.GetComponent<Piece>().blocksInPiece.Length);
+        }
 
         #endregion
+
         #region Unity Functions
         private void Awake()
         {
@@ -138,6 +161,7 @@ namespace YY_Games_Scripts
         {
             SetUpBoardGrind();
             FillUpBoardRandomly();
+            SpawnPiece();
         }
 
         // Update is called once per frame

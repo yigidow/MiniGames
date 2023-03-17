@@ -21,9 +21,9 @@ namespace YY_Games_Scripts
         [Header("Single PLayer Settings Values")]
         public bool delayStart = true;
 
-        public int gameDifficulty = 1;
-        public int densityOfBoard = 1;
-        public float gameSpeed = 1f;
+        public int gameDifficulty;
+        public int densityOfBoard;
+        public float gameSpeed;
         #endregion
         #region Single Player Settings Functionns
         public void OnGameDifficultyScrollValueChanged()
@@ -48,6 +48,18 @@ namespace YY_Games_Scripts
         }
         private void SetGameVariables()
         {
+            PlayerPrefs.SetInt("gameDifficulty", gameDifficulty);
+            PlayerPrefs.SetInt("densityOfBoard", densityOfBoard);
+            PlayerPrefs.SetFloat("gameSpeed", gameSpeed);
+        }
+        private void GetGameVariables()
+        {
+            PlayerPrefs.GetInt("gameDifficulty");
+            PlayerPrefs.GetInt("densityOfBoard");
+            PlayerPrefs.GetFloat("gameSpeed");
+            gameDifficultySlider.value = gameDifficulty;
+            densitySlider.value = densityOfBoard;
+            gameSpeedSlider.value = gameSpeed;
 
         }
         #endregion
@@ -65,13 +77,14 @@ namespace YY_Games_Scripts
                     Destroy(instance.gameObject);
                     instance = this;
                 }
-                DontDestroyOnLoad(gameObject);
             }
         }
         private void Start()
         {
+            GetGameVariables();
             backButton.onClick.AddListener(OnSinglePlayerMenuBackButtonClicked);
             playButton.onClick.AddListener(OnSinglePlayerMenuPlayButtonClicked);
+            playButton.onClick.AddListener(SetGameVariables);
         }
         #endregion
     }
