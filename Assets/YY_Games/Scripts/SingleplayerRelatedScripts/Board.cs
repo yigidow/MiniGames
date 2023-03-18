@@ -22,7 +22,8 @@ namespace YY_Games_Scripts
 
         [Header("Block Variables")]
         [SerializeField] private List<GameObject> blocks = new List<GameObject>();
-        [SerializeField] private int blockCount = 25;
+        [SerializeField] private int maxBlockCount;
+        [SerializeField] private int blockDensity;
         [SerializeField] private int boxColorCount;
 
         [Header("Spawned Piece Variables")]
@@ -39,13 +40,16 @@ namespace YY_Games_Scripts
             switch (density)
             {
                 case 1:
-                    blockCount = 50;
+                    blockDensity = 3;
+                    maxBlockCount = 50;
                     break;
                 case 2:
-                    blockCount = 75;
+                    blockDensity = 4;
+                    maxBlockCount = 75;
                     break;
                 case 3:
-                    blockCount = 100;
+                    blockDensity = 5;
+                    maxBlockCount = 100;
                     break;
             }
             switch (difficulty)
@@ -76,8 +80,15 @@ namespace YY_Games_Scripts
             {
                 for(int j = 0; j < rows; j++)
                 {
+                    //Setting the position of grid
+                    Vector2 tempPos = new Vector2(i, j);
+                    GameObject grid = Instantiate(gridCell, (Vector2)gridStartPos.position + tempPos, Quaternion.identity, gridParent.transform);
+                    grid.GetComponent<Grid>().positionOfGrid.Set(grid.transform.position.x, grid.transform.position.y, grid.transform.position.z);
+                    grid.gameObject.name = "("+ i + "," + j +")";
+                    boardGrid[i, j] = grid;
+
                     //for randomly fill
-                    int rand = Random.Range(0, 3);
+                    int randDensity = Random.Range(0, blockDensity);
 
                     //for picking random color
                     int randomColor = Random.Range(0, boxColorCount);
@@ -98,22 +109,14 @@ namespace YY_Games_Scripts
                         }
                     }
 
-                    //Setting the position of grid
-                    Vector2 tempPos = new Vector2(i, j);
-                    GameObject grid = Instantiate(gridCell, (Vector2)gridStartPos.position + tempPos, Quaternion.identity, gridParent.transform);
-
-                    grid.GetComponent<Grid>().positionOfGrid.Set(grid.transform.position.x, grid.transform.position.y, grid.transform.position.z);
-                    grid.gameObject.name = "("+ i + "," + j +")";
-                    boardGrid[i, j] = grid;
-
                     //Setting the grid if it has a block or not
-                    if(rand == 0)
+                    if(randDensity == 0 || randDensity == 1)
                     {
                         grid.GetComponent<Grid>().hasBlock = false;
                     }
-                    else if(rand == 1 || rand == 2)
+                    else
                     {
-                        if (counter < blockCount && grid.GetComponent<Grid>().positionOfGrid.y <= 5)
+                        if (counter < maxBlockCount && grid.GetComponent<Grid>().positionOfGrid.y <= 5)
                         {
                             grid.GetComponent<Grid>().hasBlock = true;
                             grid.GetComponent<Grid>().colorCode = randomColor;
@@ -139,6 +142,27 @@ namespace YY_Games_Scripts
                 }
             }
         }
+        private void FixRowBoxColour()
+        {
+            for (int i = 0; i < columns - 3; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 1, j].GetComponent<Grid>().colorCode && 
+                        boardGrid[i+1, j].GetComponent<Grid>().colorCode == boardGrid[i + 2, j].GetComponent<Grid>().colorCode &&
+                        boardGrid[i + 2, j].GetComponent<Grid>().colorCode == boardGrid[i + 3, j].GetComponent<Grid>().colorCode)
+                    {
+                        boardGrid[i + 2, j].GetComponent<Grid>().colorCode++;
+                        if(boardGrid[i + 2, j].GetComponent<Grid>().colorCode >= boxColorCount)
+                        {
+                            boardGrid[i + 2, j].GetComponent<Grid>().colorCode = 0;
+                        }
+                        Debug.Log("Fixed" + i +""+ j);
+                    }
+                }
+            }
+        }
+
         private void SpawnPiece()
         {
             //Spawn the piece
@@ -163,6 +187,7 @@ namespace YY_Games_Scripts
         void Start()
         {
             SetUpBoardGrind();
+            FixRowBoxColour();
             FillUpBoardRandomly();
             SpawnPiece();
         }
