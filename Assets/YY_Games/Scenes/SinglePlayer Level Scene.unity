@@ -3673,7 +3673,7 @@ Transform:
   m_LocalScale: {x: 0.52613, y: 0.52473676, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1829439985}
+  m_Father: {fileID: 1588828439}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &414807110
@@ -16807,6 +16807,40 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1586299829}
   m_CullTransparentMesh: 1
+--- !u!1 &1588828438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1588828439}
+  m_Layer: 0
+  m_Name: BoardComponents
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1588828439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588828438}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 414807109}
+  - {fileID: 1914817686}
+  - {fileID: 1660637088}
+  m_Father: {fileID: 1829439985}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1593514482
 GameObject:
   m_ObjectHideFlags: 0
@@ -17535,7 +17569,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1829439985}
+  m_Father: {fileID: 1588828439}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1672232903
@@ -18954,14 +18988,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   border: {fileID: 414807111}
-  rows: 20
-  columns: 10
   difficulty: 0
   density: 0
   gridCell: {fileID: 2559553421365196668, guid: ea4c6f7334d6da94b94710d505ebb8e8, type: 3}
   gridStartPos: {fileID: 1660637088}
   gridParent: {fileID: 883761546}
-  boardGrid: []
   blocks:
   - {fileID: 6549066713478710824, guid: 9e8f7a3bdf184244d9c76b77f825405d, type: 3}
   - {fileID: 6549066713478710824, guid: cf611b6f7acde4e4ebb07007d27a75a7, type: 3}
@@ -18984,9 +19015,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 414807109}
-  - {fileID: 1914817686}
-  - {fileID: 1660637088}
+  - {fileID: 1588828439}
   - {fileID: 1796418213}
   - {fileID: 883761547}
   m_Father: {fileID: 0}
@@ -19720,7 +19749,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1829439985}
+  m_Father: {fileID: 1588828439}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1923016456

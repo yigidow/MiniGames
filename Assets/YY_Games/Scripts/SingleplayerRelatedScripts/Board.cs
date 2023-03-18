@@ -9,8 +9,8 @@ namespace YY_Games_Scripts
         #region Variables and References
         [Header("Board Values")]
         [SerializeField] private BoxCollider2D border;
-        [SerializeField] private int rows = 20;
-        [SerializeField] private int columns = 10;
+        [SerializeField] private static int rows = 20;
+        [SerializeField] private static int columns = 10;
         [SerializeField] private int difficulty;
         [SerializeField] private int density;
 
@@ -18,7 +18,7 @@ namespace YY_Games_Scripts
         [SerializeField] private GameObject gridCell;
         [SerializeField] private Transform gridStartPos;
         [SerializeField] private GameObject gridParent;
-        [SerializeField] private List<GameObject> boardGrid = new List<GameObject>();
+        [SerializeField] private GameObject[,] boardGrid = new GameObject[columns, rows];
 
         [Header("Block Variables")]
         [SerializeField] private List<GameObject> blocks = new List<GameObject>();
@@ -104,7 +104,7 @@ namespace YY_Games_Scripts
 
                     grid.GetComponent<Grid>().positionOfGrid.Set(grid.transform.position.x, grid.transform.position.y, grid.transform.position.z);
                     grid.gameObject.name = "("+ i + "," + j +")";
-                    boardGrid.Add(grid);
+                    boardGrid[i, j] = grid;
 
                     //Setting the grid if it has a block or not
                     if(rand == 0)
@@ -127,12 +127,15 @@ namespace YY_Games_Scripts
         }
         private void FillUpBoardRandomly()
         {
-            for (int i = 0; i < boardGrid.Count; i++)
+            for (int i = 0; i < columns; i++)
             {
-                if (boardGrid[i].GetComponent<Grid>().hasBlock)
+                for (int j = 0; j< rows; j++)
                 {
-                    Instantiate(blocks[boardGrid[i].GetComponent<Grid>().colorCode], 
-                        boardGrid[i].GetComponent<Grid>().positionOfGrid, Quaternion.identity, boardGrid[i].gameObject.transform);
+                    if (boardGrid[i,j].GetComponent<Grid>().hasBlock)
+                    {
+                        Instantiate(blocks[boardGrid[i,j].GetComponent<Grid>().colorCode],
+                            boardGrid[i,j].GetComponent<Grid>().positionOfGrid, Quaternion.identity, boardGrid[i,j].gameObject.transform);
+                    }
                 }
             }
         }
