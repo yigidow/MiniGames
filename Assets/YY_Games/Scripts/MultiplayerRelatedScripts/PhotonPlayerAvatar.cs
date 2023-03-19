@@ -25,7 +25,7 @@
 //        [Header("Photon Player Movement Variables")]
 //        [SerializeField] private float movSpeed = 0.5f;
 //        public PlayerStates playerStates = PlayerStates.IsGettingReady;
-//        private Vector2 movementVector =new();
+//        private Vector2 movementVector = new();
 //        private Ray2D groundLeftRay;
 //        private RaycastHit2D groundLeftRayHit;
 //        private Ray2D groundRightRay;
@@ -86,7 +86,7 @@
 //                //Getting network pos with lag
 //                currentTime = 0f;
 //                lastPacketReceivedTime = currentPacketTime;
-//                currentPacketTime = (float) info.SentServerTime;
+//                currentPacketTime = (float)info.SentServerTime;
 //                lastPositionOnNetwork = transform.position;
 
 //                //float lag = Mathf.Abs((float) (PhotonNetwork.Time - info.SentServerTime));
@@ -132,8 +132,8 @@
 //                playerStates = PlayerStates.OffGround;
 //                return;
 //            }
-            
-//            if(isFinished == true)
+
+//            if (isFinished == true)
 //            {
 //                playerStates = PlayerStates.WinLose;
 //                return;
@@ -200,16 +200,16 @@
 //                default:
 //                    break;
 //            }
-//        }   
+//        }
 //        #endregion
 //        #region Movement Functions
 //        private void HandleMovementOfPlayer()
 //        {
-           
+
 //            float horizontal = Input.GetAxis("Horizontal") + floatingJoystick.Horizontal;
 //            horizontal = Mathf.Clamp(horizontal, -1, 1);
 
- 
+
 //            if (playerStates == PlayerStates.Idle && Mathf.Abs(horizontal) < 0.2f)
 //            {
 //                horizontal = 0;
@@ -348,8 +348,8 @@
 //        private void HandleJumpingOfPlayer()
 //        {
 //            if (canJump == false) return;
-            
-//            if(Input.GetButtonDown("Jump") && groundRayHit.collider != null)
+
+//            if (Input.GetButtonDown("Jump") && groundRayHit.collider != null)
 //            {
 //                myRigidbody2D.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
 //                StartCoroutine(DisableJumping());
@@ -367,7 +367,7 @@
 //        }
 //        private void AddDownwardForceToPlayer()
 //        {
-//            if(myRigidbody2D.velocity.y < 3.5f)
+//            if (myRigidbody2D.velocity.y < 3.5f)
 //            {
 //                if (myRigidbody2D.velocity.y > 0)
 //                {
@@ -379,12 +379,12 @@
 //        private void HandleVariableJumping()
 //        {
 //            if (!(myRigidbody2D.velocity.y > 0)) return;
-            
+
 //            if (Input.GetButtonUp("Jump"))
 //            {
-//             myRigidbody2D.velocity = new Vector2(myRigidbody2D.velocity.x, 0f);
+//                myRigidbody2D.velocity = new Vector2(myRigidbody2D.velocity.x, 0f);
 //            }
-            
+
 //        }
 //        private IEnumerator DisableJumping()
 //        {
@@ -402,8 +402,8 @@
 
 //            groundRayHit = Physics2D.CapsuleCast(
 //                myCollider.bounds.center,
-//                myCollider.bounds.size, 
-//                CapsuleDirection2D.Vertical, 
+//                myCollider.bounds.size,
+//                CapsuleDirection2D.Vertical,
 //                0f,
 //                Vector2.down,
 //                0.25f,
@@ -422,7 +422,7 @@
 //        //For Moving in slopes
 //        private Vector2 CurrentNormalFromRightRay()
 //        {
-           
+
 //            groundRightRay.origin = new Vector2(
 //                transform.position.x,
 //                transform.position.y - myCollider.bounds.extents.y
@@ -445,7 +445,7 @@
 //        }
 //        private Vector2 CurrentNormalFromLeftRay()
 //        {
-            
+
 //            groundLeftRay.origin = new Vector2(
 //                transform.position.x,
 //                transform.position.y - myCollider.bounds.extents.y
@@ -467,7 +467,7 @@
 //        }
 //        private Vector2 CurrentNormalFromGround()
 //        {
-            
+
 //            groundNormalRay.origin = new Vector2(
 //                transform.position.x,
 //                transform.position.y - myCollider.bounds.extents.y
@@ -475,16 +475,16 @@
 //            groundNormalRay.direction = Vector2.down;
 
 //            groundNormalRayHit = Physics2D.Raycast(
-             
+
 //                groundNormalRay.origin,
 //                groundNormalRay.direction,
 //                0.25f,
 //                groundRayLayerMask
 //            );
-            
+
 //            if (groundNormalRayHit.collider != null)
 //            {
-                
+
 //                if (groundNormalRayHit.collider.CompareTag("Ground"))
 //                {
 //                    return groundNormalRayHit.normal.normalized;
@@ -504,7 +504,7 @@
 //        #region Functions For JoyStick
 //        private void TurnOnJoyStickCanvasIfOnMMobile()
 //        {
-//            if(Application.platform == RuntimePlatform.Android)
+//            if (Application.platform == RuntimePlatform.Android)
 //            {
 //                JoystickCanvas.SetActive(true);
 //            }
@@ -561,7 +561,7 @@
 //        {
 //            if (photonView.IsMine == false) return;
 
-//            if(thisPlayerHasWon == true)
+//            if (thisPlayerHasWon == true)
 //            {
 //                photonNetworkPlayer.EnableWinLoseScreen("You Won! Returning to Main Menu");
 //                AddWinLossToPlayerRecordUsingCloud(true);
@@ -584,8 +584,8 @@
 //                PlayFabClientAPI.ExecuteCloudScript(executeCloudScriptRequest,
 //                    resultCallback: result =>
 //                    {
-//                    // Getting Result From Server
-//                    var serilizedResult = JObject.Parse(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
+//                        // Getting Result From Server
+//                        var serilizedResult = JObject.Parse(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
 
 //                        print(serilizedResult["message"]);
 
@@ -649,8 +649,8 @@
 //            PlayFabClientAPI.ExecuteCloudScript(executeCloudScriptRequest,
 //                resultCallback: result =>
 //                {
-//                  // Getting Result From Server
-//                  var serilizedResult = JObject.Parse(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
+//                    // Getting Result From Server
+//                    var serilizedResult = JObject.Parse(PluginManager.GetPlugin<ISerializerPlugin>(PluginContract.PlayFab_Serializer).SerializeObject(result.FunctionResult));
 
 //                    print(serilizedResult["message"]);
 
@@ -671,7 +671,7 @@
 //        }
 //        private IEnumerator Routine_LevelCompleteTimeRoutine()
 //        {
-//            while(isFinished == false)
+//            while (isFinished == false)
 //            {
 //                levelCompleteTime++;
 //                yield return new WaitForSeconds(0.01f);
@@ -681,7 +681,7 @@
 //        #region Camera & UI Functions
 //        private IEnumerator FindTheCamera()
 //        {
-//            while(mainCamera == null)
+//            while (mainCamera == null)
 //            {
 //                mainCamera = Camera.main;
 //                yield return new WaitForSeconds(0.1f);
@@ -715,7 +715,7 @@
 
 //            transform.position = Vector3.Lerp(lastPositionOnNetwork, positionOnNetwork, (float)(currentTime / currentGoalTime));
 
-//            if(Vector3.Distance(transform.position, positionOnNetwork) > teleportIfDistanceGreaterThan)
+//            if (Vector3.Distance(transform.position, positionOnNetwork) > teleportIfDistanceGreaterThan)
 //            {
 //                transform.position = positionOnNetwork;
 //            }
@@ -728,7 +728,7 @@
 //        }
 //        void Start()
 //        {
-//            if (photonView.IsMine == false) 
+//            if (photonView.IsMine == false)
 //            {
 //                SetUpPhysicsForForeignPlayer();
 //                JoystickCanvas.SetActive(false);

@@ -18999,7 +18999,8 @@ MonoBehaviour:
   - {fileID: 6549066713478710824, guid: 4dd2301d75d3a60499f9b56ccb13df6f, type: 3}
   - {fileID: 6549066713478710824, guid: 9e80e61b45b86074eadc3fe9af814ba6, type: 3}
   - {fileID: 6549066713478710824, guid: 6aab898d057601d47ae4d354cc2917cb, type: 3}
-  blockCount: 25
+  maxBlockCount: 120
+  blockDensity: 0
   boxColorCount: 3
   pieceToSpawn: {fileID: 4772244216607415801, guid: 3ba4820ccedd3674cbb3ee9b3a7277ab, type: 3}
   pieceSpawnPos: {fileID: 1914817686}
@@ -19016,8 +19017,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1588828439}
-  - {fileID: 1796418213}
   - {fileID: 883761547}
+  - {fileID: 1796418213}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

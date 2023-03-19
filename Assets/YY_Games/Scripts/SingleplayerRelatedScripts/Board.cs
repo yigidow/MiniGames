@@ -157,7 +157,6 @@ namespace YY_Games_Scripts
                         {
                             boardGrid[i + 2, j].GetComponent<Grid>().colorCode = 0;
                         }
-                        Debug.Log("Fixed" + i +""+ j);
                     }
                 }
             }
@@ -169,12 +168,11 @@ namespace YY_Games_Scripts
             GameObject spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2) pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
             //Set piece blocks randomly
-            for(int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
+            for(int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
             {
                 int rand = Random.Range(0, boxColorCount);
-                spawnedPiece.GetComponent<Piece>().blocksInPiece[i] = blocks[rand];
+                spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = blocks[rand];
             }
-            Debug.Log(spawnedPiece.GetComponent<Piece>().blocksInPiece.Length);
         }
 
         #endregion
