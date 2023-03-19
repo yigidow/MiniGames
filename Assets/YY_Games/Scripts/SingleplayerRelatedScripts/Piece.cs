@@ -6,6 +6,7 @@ namespace YY_Games_Scripts
 {
     public class Piece : MonoBehaviour
     {
+        #region Variables and References
         [Header("Piece Block Components")]
         public GameObject[] blocksInPiecePrefab;
         public GameObject[] blocksInPiece;
@@ -18,9 +19,10 @@ namespace YY_Games_Scripts
         private float stepTime;
         private float moveTime;
         private float lockTime;
+        private bool isPieceLocked = false;
 
         [Header("Rotation Variables")]
-        public float rotateDelay = 0.2f;
+        public float rotateDelay = 0.01f;
         private float rotateTime;
         public enum PiecePositions
         {
@@ -31,7 +33,8 @@ namespace YY_Games_Scripts
         }
         public PiecePositions currentPosition = PiecePositions.pos0;
 
-
+        #endregion
+        #region Functions To Initilaze the spawned piece
         private void Initialize()
         {
             for(int i = 0; i < blocksInPiecePrefab.Length; i++)
@@ -39,18 +42,64 @@ namespace YY_Games_Scripts
                 blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, this.gameObject.transform);
             }
         }
-
-        private void Move()
+        #endregion
+        #region Function to Handle Movement and Rotation of Piece
+        private void MoveHorrizontal()
         {
             moveTime = Time.time + moveDelay;
 
-            if (transform.position.x > -4.5f && Input.GetKey(KeyCode.A))
+            if (currentPosition == PiecePositions.pos0 || currentPosition == PiecePositions.pos2) 
             {
-                transform.position += new Vector3(-1, 0, 0);
+                if (transform.position.x > -4.5f && Input.GetKey(KeyCode.A))
+                {
+                    transform.position += new Vector3(-1, 0, 0);
+                }
+                else if (transform.position.x < 3.5f && Input.GetKey(KeyCode.D))
+                {
+                    transform.position += new Vector3(1, 0, 0);
+                }
             }
-            else if (transform.position.x < 4.5f && Input.GetKey(KeyCode.D))
+            else
             {
-                transform.position += new Vector3(1, 0, 0);
+                if (transform.position.x > -4.5f && Input.GetKey(KeyCode.A))
+                {
+                    transform.position += new Vector3(-1, 0, 0);
+                }
+                else if (transform.position.x < 4.5f && Input.GetKey(KeyCode.D))
+                {
+                    transform.position += new Vector3(1, 0, 0);
+                }
+            }
+        }
+        private void MoveVerticalFreeFall()
+        {
+            stepTime = Time.time + stepDelay;
+            transform.position += new Vector3(0, -1, 0);
+            if (transform.position.y == -10)
+            {
+                isPieceLocked = true;
+            }
+        }
+        private void MoveVertical()
+        {
+            moveTime = Time.time + moveDelay;
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.position += new Vector3(0, -1, 0);
+            }
+            if(currentPosition == PiecePositions.pos1 || currentPosition == PiecePositions.pos3)
+            {
+                if (transform.position.y == -9)
+                {
+                    isPieceLocked = true;
+                }
+            }
+            else
+            {
+                if (transform.position.y == -10)
+                {
+                    isPieceLocked = true;
+                }
             }
         }
         private void RotateRight()
@@ -64,6 +113,12 @@ namespace YY_Games_Scripts
             else if (currentPosition == PiecePositions.pos1)
             {
                 currentPosition = PiecePositions.pos2;
+
+                //Wall kick
+                if (transform.position.x == 4.5)
+                {
+                    transform.position += new Vector3(-1, 0, 0);
+                }
             }
             else if (currentPosition == PiecePositions.pos2)
             {
@@ -72,6 +127,12 @@ namespace YY_Games_Scripts
             else if (currentPosition == PiecePositions.pos3)
             {
                 currentPosition = PiecePositions.pos0;
+
+                //Wall kick
+                if (transform.position.x == 4.5)
+                {
+                    transform.position += new Vector3(-1, 0, 0);
+                }
             }
         }
         private void RotateLeft()
@@ -86,6 +147,11 @@ namespace YY_Games_Scripts
             {
                 currentPosition = PiecePositions.pos0;
 
+                //Wall kick
+                if (transform.position.x == 4.5) 
+                {
+                    transform.position += new Vector3(-1, 0, 0);
+                }
             }
             else if (currentPosition == PiecePositions.pos2)
             {
@@ -94,12 +160,17 @@ namespace YY_Games_Scripts
             else if (currentPosition == PiecePositions.pos3)
             {
                 currentPosition = PiecePositions.pos2;
+
+                //Wall kick
+                if (transform.position.x == 4.5)
+                {
+                    transform.position += new Vector3(-1, 0, 0);
+                }
+
             }
         }
-        public void test()
-        {
-            HandleRotation();
-        }
+
+        //Piece Positions
         private void HandleRotation()
         {
             switch (currentPosition)
@@ -122,6 +193,8 @@ namespace YY_Games_Scripts
                     break;
             }
         }
+        #endregion
+        #region Unity Functions
         void Start()
         {
             Initialize();
@@ -130,26 +203,39 @@ namespace YY_Games_Scripts
         // Update is called once per frame
         void Update()
         {
-            if (Time.time > moveTime)
+            if (!isPieceLocked)
             {
-               Move();
-            }
-
-            if(Time.time > rotateTime)
-            {
-                if (Input.GetKey(KeyCode.E))
+                // Hande movement with horizontal Inputs
+                if (Time.time > moveTime)
                 {
-                    RotateRight();
-                    HandleRotation();
+                    MoveHorrizontal();
+                    MoveVertical();
                 }
 
-                if (Input.GetKey(KeyCode.Q))
+                //Handling Rotation Movements
+                if (Time.time > rotateTime)
                 {
-                    RotateLeft();
-                    HandleRotation();
+                    if (Input.GetKey(KeyCode.E))
+                    {
+                        RotateRight();
+                        HandleRotation();
+                    }
+
+                    if (Input.GetKey(KeyCode.Q))
+                    {
+                        RotateLeft();
+                        HandleRotation();
+                    }
+                }
+
+                //Handling free fall
+                if (Time.time > stepTime)
+                {
+                    MoveVerticalFreeFall();
                 }
             }
         }
+        #endregion
     }
 }
 

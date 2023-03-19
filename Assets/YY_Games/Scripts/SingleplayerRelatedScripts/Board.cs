@@ -13,6 +13,7 @@ namespace YY_Games_Scripts
         [SerializeField] private static int columns = 10;
         [SerializeField] private int difficulty;
         [SerializeField] private int density;
+        [SerializeField] private float speed;
 
         [Header("Board Grid Components")]
         [SerializeField] private GameObject gridCell;
@@ -29,6 +30,7 @@ namespace YY_Games_Scripts
         [Header("Spawned Piece Variables")]
         [SerializeField] private Piece pieceToSpawn;
         [SerializeField] private Transform pieceSpawnPos;
+        [SerializeField] private float pieceSpeed;
 
         #endregion
         #region Functions to set up the board at start
@@ -37,6 +39,7 @@ namespace YY_Games_Scripts
         {
             difficulty = PlayerPrefs.GetInt("gameDifficulty");
             density = PlayerPrefs.GetInt("densityOfBoard");
+            speed = PlayerPrefs.GetFloat("gameSpeed");
             switch (density)
             {
                 case 1:
@@ -65,6 +68,18 @@ namespace YY_Games_Scripts
                 //4 colours
                 case 3:
                     boxColorCount = 5;
+                    break;
+            }
+            switch (speed)
+            {
+                case 1:
+                    pieceSpeed = 1;
+                    break;
+                case 2:
+                    pieceSpeed = 0.5f;
+                    break;
+                case 3:
+                    pieceSpeed = 0.25f;
                     break;
             }
 
@@ -161,7 +176,8 @@ namespace YY_Games_Scripts
                 }
             }
         }
-
+        #endregion
+        #region Functions to Spawn Playable Pieces
         private void SpawnPiece()
         {
             //Spawn the piece
@@ -173,10 +189,11 @@ namespace YY_Games_Scripts
                 int rand = Random.Range(0, boxColorCount);
                 spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = blocks[rand];
             }
+
+            //Set the piece fall down speed
+            spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
         }
-
         #endregion
-
         #region Unity Functions
         private void Awake()
         {
