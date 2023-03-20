@@ -7,22 +7,24 @@ namespace YY_Games_Scripts
     public class Piece : MonoBehaviour
     {
         #region Variables and References
+        [Header("Board")]
+        [SerializeField] private Board gameBoard;
+
         [Header("Piece Block Components")]
         public GameObject[] blocksInPiecePrefab;
         public GameObject[] blocksInPiece;
         public Transform[] blockPositions;
 
         [Header("Movement Variables")]
-        public float stepDelay = 1f;
+        public float stepDelay = 5f;
         public float moveDelay = 0.1f;
-        public float lockDelay = 0.5f;
+        public float lockDelay = 1f;
         private float stepTime;
         private float moveTime;
-        private float lockTime;
         private bool isPieceLocked = false;
 
         [Header("Rotation Variables")]
-        public float rotateDelay = 0.01f;
+        public float rotateDelay = 0.1f;
         private float rotateTime;
         public enum PiecePositions
         {
@@ -41,6 +43,7 @@ namespace YY_Games_Scripts
             {
                 blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, this.gameObject.transform);
             }
+            gameBoard = FindObjectOfType<Board>();
         }
         #endregion
         #region Function to Handle Movement and Rotation of Piece
@@ -50,22 +53,22 @@ namespace YY_Games_Scripts
 
             if (currentPosition == PiecePositions.pos0 || currentPosition == PiecePositions.pos2) 
             {
-                if (transform.position.x > -4.5f && Input.GetKey(KeyCode.A))
+                if (transform.localPosition.x > -4.5f && Input.GetKey(KeyCode.A))
                 {
                     transform.position += new Vector3(-1, 0, 0);
                 }
-                else if (transform.position.x < 3.5f && Input.GetKey(KeyCode.D))
+                else if (transform.localPosition.x < 3.5f && Input.GetKey(KeyCode.D))
                 {
                     transform.position += new Vector3(1, 0, 0);
                 }
             }
             else
             {
-                if (transform.position.x > -4.5f && Input.GetKey(KeyCode.A))
+                if (transform.localPosition.x > -4.5f && Input.GetKey(KeyCode.A))
                 {
                     transform.position += new Vector3(-1, 0, 0);
                 }
-                else if (transform.position.x < 4.5f && Input.GetKey(KeyCode.D))
+                else if (transform.localPosition.x < 4.5f && Input.GetKey(KeyCode.D))
                 {
                     transform.position += new Vector3(1, 0, 0);
                 }
@@ -74,7 +77,7 @@ namespace YY_Games_Scripts
         private void MoveVerticalFreeFall()
         {
             stepTime = Time.time + stepDelay;
-            transform.position += new Vector3(0, -1, 0);
+            transform.localPosition += new Vector3(0, -1, 0);
             if (transform.position.y == -10)
             {
                 isPieceLocked = true;
@@ -85,7 +88,7 @@ namespace YY_Games_Scripts
             moveTime = Time.time + moveDelay;
             if (Input.GetKey(KeyCode.S))
             {
-                transform.position += new Vector3(0, -1, 0);
+                transform.localPosition += new Vector3(0, -1, 0);
             }
             if(currentPosition == PiecePositions.pos1 || currentPosition == PiecePositions.pos3)
             {
@@ -115,7 +118,7 @@ namespace YY_Games_Scripts
                 currentPosition = PiecePositions.pos2;
 
                 //Wall kick
-                if (transform.position.x == 4.5)
+                if (transform.localPosition.x == 4.5)
                 {
                     transform.position += new Vector3(-1, 0, 0);
                 }
@@ -129,9 +132,9 @@ namespace YY_Games_Scripts
                 currentPosition = PiecePositions.pos0;
 
                 //Wall kick
-                if (transform.position.x == 4.5)
+                if (transform.localPosition.x == 4.5)
                 {
-                    transform.position += new Vector3(-1, 0, 0);
+                    transform.localPosition += new Vector3(-1, 0, 0);
                 }
             }
         }
@@ -148,9 +151,9 @@ namespace YY_Games_Scripts
                 currentPosition = PiecePositions.pos0;
 
                 //Wall kick
-                if (transform.position.x == 4.5) 
+                if (transform.localPosition.x == 4.5) 
                 {
-                    transform.position += new Vector3(-1, 0, 0);
+                    transform.localPosition += new Vector3(-1, 0, 0);
                 }
             }
             else if (currentPosition == PiecePositions.pos2)
@@ -162,9 +165,9 @@ namespace YY_Games_Scripts
                 currentPosition = PiecePositions.pos2;
 
                 //Wall kick
-                if (transform.position.x == 4.5)
+                if (transform.localPosition.x == 4.5)
                 {
-                    transform.position += new Vector3(-1, 0, 0);
+                    transform.localPosition += new Vector3(-1, 0, 0);
                 }
 
             }
@@ -192,6 +195,42 @@ namespace YY_Games_Scripts
                     blocksInPiece[1].transform.position = blockPositions[0].position;
                     break;
             }
+        }
+        #endregion
+
+        #region Functions to Interact with board
+
+        public bool CanMoveThere()
+        {
+            if(currentPosition == PiecePositions.pos0 || currentPosition == PiecePositions.pos2)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if ((blockPositions[0].transform.position.x - 1) == gameBoard.boardGrid[i, j].transform.position.x &&
+                            gameBoard.boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                        {
+                            return false;
+                            Debug.Log("nope");
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            //else if(currentPosition == PiecePositions.pos1 || currentPosition == PiecePositions.pos3)
+            //{
+
+            //}
+            return true;
+        }
+        public IEnumerator LockPiece()
+        {
+            yield return new WaitForSeconds(lockDelay);
+            isPieceLocked = true;
         }
         #endregion
         #region Unity Functions

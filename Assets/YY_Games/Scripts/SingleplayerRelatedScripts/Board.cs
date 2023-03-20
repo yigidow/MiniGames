@@ -7,7 +7,7 @@ namespace YY_Games_Scripts
     public class Board : MonoBehaviour
     {
         #region Variables and References
-        [Header("Board Values")]
+        [Header("Game Values")]
         [SerializeField] private BoxCollider2D border;
         [SerializeField] private static int rows = 20;
         [SerializeField] private static int columns = 10;
@@ -19,7 +19,7 @@ namespace YY_Games_Scripts
         [SerializeField] private GameObject gridCell;
         [SerializeField] private Transform gridStartPos;
         [SerializeField] private GameObject gridParent;
-        [SerializeField] private GameObject[,] boardGrid = new GameObject[columns, rows];
+        [SerializeField] public GameObject[,] boardGrid = new GameObject[columns, rows];
 
         [Header("Block Variables")]
         [SerializeField] private List<GameObject> blocks = new List<GameObject>();
@@ -29,6 +29,7 @@ namespace YY_Games_Scripts
 
         [Header("Spawned Piece Variables")]
         [SerializeField] private Piece pieceToSpawn;
+        [SerializeField] private GameObject spawnedPiece;
         [SerializeField] private Transform pieceSpawnPos;
         [SerializeField] private float pieceSpeed;
 
@@ -44,11 +45,11 @@ namespace YY_Games_Scripts
             {
                 case 1:
                     blockDensity = 3;
-                    maxBlockCount = 50;
+                    maxBlockCount = 25;
                     break;
                 case 2:
                     blockDensity = 4;
-                    maxBlockCount = 75;
+                    maxBlockCount = 50;
                     break;
                 case 3:
                     blockDensity = 5;
@@ -181,7 +182,7 @@ namespace YY_Games_Scripts
         private void SpawnPiece()
         {
             //Spawn the piece
-            GameObject spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2) pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
+            spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2) pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
             //Set piece blocks randomly
             for(int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
@@ -192,6 +193,14 @@ namespace YY_Games_Scripts
 
             //Set the piece fall down speed
             spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+        }
+
+        private void LockTheSpawnedPiece()
+        {
+            foreach(GameObject block in spawnedPiece.GetComponent<Piece>().blocksInPiece)
+            {
+                
+            }
         }
         #endregion
         #region Unity Functions

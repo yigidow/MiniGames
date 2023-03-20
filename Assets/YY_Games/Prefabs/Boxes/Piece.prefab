@@ -93,6 +93,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 617dcebe397dc7140acda273a3928789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameBoard: {fileID: 0}
   blocksInPiecePrefab:
   - {fileID: 0}
   - {fileID: 0}
@@ -106,6 +107,7 @@ MonoBehaviour:
   stepDelay: 1
   moveDelay: 0.1
   lockDelay: 0.5
+  rotateDelay: 0.2
   currentPosition: 0
 --- !u!61 &4772244216607415750
 BoxCollider2D:
