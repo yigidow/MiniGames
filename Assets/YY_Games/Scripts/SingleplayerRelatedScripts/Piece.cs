@@ -26,6 +26,17 @@ namespace YY_Games_Scripts
         [Header("Rotation Variables")]
         public float rotateDelay = 0.1f;
         private float rotateTime;
+
+        [Header("Colliders")]
+        [SerializeField] private GameObject horizizontalColliders;
+        [SerializeField] private BoxCollider2D horizontalDownCollider;
+        [SerializeField] private BoxCollider2D horizontalLeftCollider;
+        [SerializeField] private BoxCollider2D horizontalRightCollider;
+        [SerializeField] private GameObject verticalColliders;
+        [SerializeField] private BoxCollider2D verticalDownCollider;
+        [SerializeField] private BoxCollider2D verticalLeftCollider;
+        [SerializeField] private BoxCollider2D verticalRightCollider;
+
         public enum PiecePositions
         {
             pos0,
@@ -33,6 +44,7 @@ namespace YY_Games_Scripts
             pos2,
             pos3,
         }
+        [Header("Piece Pos")]
         public PiecePositions currentPosition = PiecePositions.pos0;
 
         #endregion
@@ -42,7 +54,9 @@ namespace YY_Games_Scripts
             for(int i = 0; i < blocksInPiecePrefab.Length; i++)
             {
                 blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, this.gameObject.transform);
+                blocksInPiece[i].gameObject.tag = ("PieceBlock");
             }
+            horizizontalColliders.SetActive(true);
             gameBoard = FindObjectOfType<Board>();
         }
         #endregion
@@ -181,18 +195,26 @@ namespace YY_Games_Scripts
                 case PiecePositions.pos0:
                     blocksInPiece[0].transform.position = blockPositions[0].position;
                     blocksInPiece[1].transform.position = blockPositions[1].position;
+                    horizizontalColliders.SetActive(true);
+                    verticalColliders.SetActive(false);
                     break;
                 case PiecePositions.pos1:
                     blocksInPiece[0].transform.position = blockPositions[0].position;
                     blocksInPiece[1].transform.position = blockPositions[2].position;
+                    horizizontalColliders.SetActive(false);
+                    verticalColliders.SetActive(true);
                     break;
                 case PiecePositions.pos2:
                     blocksInPiece[0].transform.position = blockPositions[1].position;
                     blocksInPiece[1].transform.position = blockPositions[0].position;
+                    horizizontalColliders.SetActive(true);
+                    verticalColliders.SetActive(false);
                     break;
                 case PiecePositions.pos3:
                     blocksInPiece[0].transform.position = blockPositions[2].position;
                     blocksInPiece[1].transform.position = blockPositions[0].position;
+                    horizizontalColliders.SetActive(false);
+                    verticalColliders.SetActive(true);
                     break;
             }
         }
@@ -200,32 +222,25 @@ namespace YY_Games_Scripts
 
         #region Functions to Interact with board
 
-        public bool CanMoveThere()
+        public void CanMoveThere()
         {
-            if(currentPosition == PiecePositions.pos0 || currentPosition == PiecePositions.pos2)
+            for (int i = 0; i < 10; i++)
             {
-                for (int i = 0; i < 20; i++)
+                for (int j = 0; j < 20; j++)
                 {
-                    for (int j = 0; j < 10; j++)
+                    if (currentPosition == PiecePositions.pos0 || currentPosition == PiecePositions.pos2)
                     {
-                        if ((blockPositions[0].transform.position.x - 1) == gameBoard.boardGrid[i, j].transform.position.x &&
-                            gameBoard.boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                        if (horizontalDownCollider.IsTouching(gameBoard.boardGrid[i, j].GetComponent<BoxCollider2D>()))
                         {
-                            return false;
-                            Debug.Log("nope");
-                        }
-                        else
-                        {
-                            return true;
+                            if(gameBoard.boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            {
+                                Debug.Log("nope");
+                            }
+                                Debug.Log("grid");
                         }
                     }
                 }
             }
-            //else if(currentPosition == PiecePositions.pos1 || currentPosition == PiecePositions.pos3)
-            //{
-
-            //}
-            return true;
         }
         public IEnumerator LockPiece()
         {
@@ -273,6 +288,7 @@ namespace YY_Games_Scripts
                     MoveVerticalFreeFall();
                 }
             }
+            //CanMoveThere();
         }
         #endregion
     }

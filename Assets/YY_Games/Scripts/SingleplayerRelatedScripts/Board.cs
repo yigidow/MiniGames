@@ -44,15 +44,15 @@ namespace YY_Games_Scripts
             switch (density)
             {
                 case 1:
-                    blockDensity = 3;
+                    blockDensity = 4;
                     maxBlockCount = 25;
                     break;
                 case 2:
-                    blockDensity = 4;
+                    blockDensity = 5;
                     maxBlockCount = 50;
                     break;
                 case 3:
-                    blockDensity = 5;
+                    blockDensity = 6;
                     maxBlockCount = 100;
                     break;
             }
@@ -126,7 +126,7 @@ namespace YY_Games_Scripts
                     }
 
                     //Setting the grid if it has a block or not
-                    if(randDensity == 0 || randDensity == 1)
+                    if(randDensity == 0 || randDensity == 1 || randDensity == 2)
                     {
                         grid.GetComponent<Grid>().hasBlock = false;
                     }
@@ -195,13 +195,6 @@ namespace YY_Games_Scripts
             spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
         }
 
-        private void LockTheSpawnedPiece()
-        {
-            foreach(GameObject block in spawnedPiece.GetComponent<Piece>().blocksInPiece)
-            {
-                
-            }
-        }
         #endregion
         #region Unity Functions
         private void Awake()
