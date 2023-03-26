@@ -14,6 +14,7 @@ namespace YY_Games_Scripts
         public GameObject[] blocksInPiecePrefab;
         public GameObject[] blocksInPiece;
         public Transform[] blockPositions;
+        public GameObject blocksInPieceParent;
 
         [Header("Movement Variables")]
         public float stepDelay = 5f;
@@ -27,15 +28,11 @@ namespace YY_Games_Scripts
         public float rotateDelay = 0.1f;
         private float rotateTime;
 
-        [Header("Colliders")]
-        [SerializeField] private GameObject horizizontalColliders;
-        [SerializeField] private BoxCollider2D horizontalDownCollider;
-        [SerializeField] private BoxCollider2D horizontalLeftCollider;
-        [SerializeField] private BoxCollider2D horizontalRightCollider;
-        [SerializeField] private GameObject verticalColliders;
-        [SerializeField] private BoxCollider2D verticalDownCollider;
-        [SerializeField] private BoxCollider2D verticalLeftCollider;
-        [SerializeField] private BoxCollider2D verticalRightCollider;
+        [Header("Box Checks")]
+        public BoxCollider2D currentCollider;
+        public BoxCollider2D horrizontalCollider;
+        public BoxCollider2D verticalCollider;
+        public bool canMoveDown = true;
 
         public enum PiecePositions
         {
@@ -51,13 +48,14 @@ namespace YY_Games_Scripts
         #region Functions To Initilaze the spawned piece
         private void Initialize()
         {
-            for(int i = 0; i < blocksInPiecePrefab.Length; i++)
+            gameBoard = FindObjectOfType<Board>();
+            for (int i = 0; i < blocksInPiecePrefab.Length; i++)
             {
-                blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, this.gameObject.transform);
+                blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, blocksInPieceParent.transform);
                 blocksInPiece[i].gameObject.tag = ("PieceBlock");
             }
-            horizizontalColliders.SetActive(true);
-            gameBoard = FindObjectOfType<Board>();
+            currentCollider = horrizontalCollider;
+            verticalCollider.gameObject.SetActive(false);
         }
         #endregion
         #region Function to Handle Movement and Rotation of Piece
@@ -195,53 +193,36 @@ namespace YY_Games_Scripts
                 case PiecePositions.pos0:
                     blocksInPiece[0].transform.position = blockPositions[0].position;
                     blocksInPiece[1].transform.position = blockPositions[1].position;
-                    horizizontalColliders.SetActive(true);
-                    verticalColliders.SetActive(false);
+                    currentCollider = horrizontalCollider;
+                    horrizontalCollider.gameObject.SetActive(true);
+                    verticalCollider.gameObject.SetActive(false);
                     break;
                 case PiecePositions.pos1:
                     blocksInPiece[0].transform.position = blockPositions[0].position;
                     blocksInPiece[1].transform.position = blockPositions[2].position;
-                    horizizontalColliders.SetActive(false);
-                    verticalColliders.SetActive(true);
+                    currentCollider = verticalCollider;
+                    horrizontalCollider.gameObject.SetActive(false);
+                    verticalCollider.gameObject.SetActive(true);
                     break;
                 case PiecePositions.pos2:
                     blocksInPiece[0].transform.position = blockPositions[1].position;
                     blocksInPiece[1].transform.position = blockPositions[0].position;
-                    horizizontalColliders.SetActive(true);
-                    verticalColliders.SetActive(false);
+                    currentCollider = horrizontalCollider;
+                    horrizontalCollider.gameObject.SetActive(true);
+                    verticalCollider.gameObject.SetActive(false);
                     break;
                 case PiecePositions.pos3:
                     blocksInPiece[0].transform.position = blockPositions[2].position;
                     blocksInPiece[1].transform.position = blockPositions[0].position;
-                    horizizontalColliders.SetActive(false);
-                    verticalColliders.SetActive(true);
+                    currentCollider = verticalCollider;
+                    horrizontalCollider.gameObject.SetActive(false);
+                    verticalCollider.gameObject.SetActive(true);
                     break;
             }
         }
         #endregion
 
         #region Functions to Interact with board
-
-        public void CanMoveThere()
-        {
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 20; j++)
-                {
-                    if (currentPosition == PiecePositions.pos0 || currentPosition == PiecePositions.pos2)
-                    {
-                        if (horizontalDownCollider.IsTouching(gameBoard.boardGrid[i, j].GetComponent<BoxCollider2D>()))
-                        {
-                            if(gameBoard.boardGrid[i, j].GetComponent<Grid>().hasBlock)
-                            {
-                                Debug.Log("nope");
-                            }
-                                Debug.Log("grid");
-                        }
-                    }
-                }
-            }
-        }
         public IEnumerator LockPiece()
         {
             yield return new WaitForSeconds(lockDelay);
@@ -263,7 +244,10 @@ namespace YY_Games_Scripts
                 if (Time.time > moveTime)
                 {
                     MoveHorrizontal();
-                    MoveVertical();
+                    if(canMoveDown)
+                    {
+                        MoveVertical();
+                    }
                 }
 
                 //Handling Rotation Movements
@@ -283,12 +267,20 @@ namespace YY_Games_Scripts
                 }
 
                 //Handling free fall
-                if (Time.time > stepTime)
-                {
-                    MoveVerticalFreeFall();
-                }
+                //if (Time.time > stepTime)
+                //{
+                //    if (canMoveDown)
+                //    {
+                //        MoveVerticalFreeFall();
+                //    }
+                //}
             }
-            //CanMoveThere();
+        }
+        void OnDrawGizmos()
+        {
+            // Draw a yellow sphere at the transform's position
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawCube(currentCollider.bounds.center - new Vector3(0f, 1f, 0f), currentCollider.bounds.size);
         }
         #endregion
     }

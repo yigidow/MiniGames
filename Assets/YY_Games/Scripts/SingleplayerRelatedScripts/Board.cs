@@ -212,7 +212,6 @@ namespace YY_Games_Scripts
         // Update is called once per frame
         void Update()
         {
-
         }
         #endregion
     }

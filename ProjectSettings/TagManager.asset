@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Block
+  - PieceBlock
+  - Grid
+  - Piece
   layers:
   - Default
   - TransparentFX
