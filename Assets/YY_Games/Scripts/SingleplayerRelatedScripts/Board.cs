@@ -246,6 +246,19 @@ namespace YY_Games_Scripts
 
                             }
                         }
+                        //Check Rotation
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y -1 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canRotateToVertical = false;
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canRotateToVertical = true;
+
+                            }
+                        }
                     }
                     //Vertical Pos
                     else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
@@ -268,7 +281,6 @@ namespace YY_Games_Scripts
                             if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j -1].GetComponent<Grid>().hasBlock)
                             {
                                 spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
-                                Debug.Log("Left test");
                             }
                             else
                             {
@@ -282,11 +294,23 @@ namespace YY_Games_Scripts
                             if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
                             {
                                 spawnedPiece.GetComponent<Piece>().canMoveRight = false;
-                                Debug.Log("Right test");
                             }
                             else
                             {
                                 spawnedPiece.GetComponent<Piece>().canMoveRight = true;
+
+                            }
+                        }
+                        //Check Rotation
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 1)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canRotateToHorizontal = false;
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canRotateToHorizontal = true;
 
                             }
                         }

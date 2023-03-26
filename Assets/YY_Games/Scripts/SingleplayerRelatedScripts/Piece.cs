@@ -28,13 +28,13 @@ namespace YY_Games_Scripts
         public float rotateDelay = 0.1f;
         private float rotateTime;
 
-        [Header("Box Checks")]
-        public BoxCollider2D currentCollider;
-        public BoxCollider2D horrizontalCollider;
-        public BoxCollider2D verticalCollider;
+        [Header("Movement Checks")]
         public bool canMoveDown = true;
         public bool canMoveLeft = true;
         public bool canMoveRight = true;
+
+        public bool canRotateToHorizontal = true;
+        public bool canRotateToVertical = true;
 
         public enum PiecePositions
         {
@@ -56,8 +56,6 @@ namespace YY_Games_Scripts
                 blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, blocksInPieceParent.transform);
                 blocksInPiece[i].gameObject.tag = ("PieceBlock");
             }
-            currentCollider = horrizontalCollider;
-            verticalCollider.gameObject.SetActive(false);
         }
         #endregion
         #region Function to Handle Movement and Rotation of Piece
@@ -137,11 +135,17 @@ namespace YY_Games_Scripts
 
             if (currentPosition == PiecePositions.pos0)
             {
-                currentPosition = PiecePositions.pos1;
+                if (canRotateToVertical)
+                {
+                    currentPosition = PiecePositions.pos1;
+                }
             }
             else if (currentPosition == PiecePositions.pos1)
             {
-                currentPosition = PiecePositions.pos2;
+                if (canRotateToHorizontal)
+                {
+                    currentPosition = PiecePositions.pos2;
+                }
 
                 //Wall kick
                 if (transform.localPosition.x == 4.5)
@@ -151,11 +155,17 @@ namespace YY_Games_Scripts
             }
             else if (currentPosition == PiecePositions.pos2)
             {
-                currentPosition = PiecePositions.pos3;
+                if (canRotateToVertical)
+                {
+                    currentPosition = PiecePositions.pos3;
+                }
             }
             else if (currentPosition == PiecePositions.pos3)
             {
-                currentPosition = PiecePositions.pos0;
+                if (canRotateToHorizontal)
+                {
+                    currentPosition = PiecePositions.pos0;
+                }
 
                 //Wall kick
                 if (transform.localPosition.x == 4.5)
@@ -170,11 +180,17 @@ namespace YY_Games_Scripts
 
             if (currentPosition == PiecePositions.pos0)
             {
-                currentPosition = PiecePositions.pos3;
+                if (canRotateToVertical)
+                {
+                    currentPosition = PiecePositions.pos3;
+                }
             }
             else if (currentPosition == PiecePositions.pos1)
             {
-                currentPosition = PiecePositions.pos0;
+                if (canRotateToHorizontal)
+                {
+                    currentPosition = PiecePositions.pos0;
+                }
 
                 //Wall kick
                 if (transform.localPosition.x == 4.5) 
@@ -184,11 +200,17 @@ namespace YY_Games_Scripts
             }
             else if (currentPosition == PiecePositions.pos2)
             {
-                currentPosition = PiecePositions.pos1;
+                if (canRotateToVertical)
+                {
+                    currentPosition = PiecePositions.pos1;
+                }
             }
             else if (currentPosition == PiecePositions.pos3)
             {
-                currentPosition = PiecePositions.pos2;
+                if (canRotateToHorizontal) 
+                {
+                    currentPosition = PiecePositions.pos2;
+                }
 
                 //Wall kick
                 if (transform.localPosition.x == 4.5)
@@ -207,30 +229,18 @@ namespace YY_Games_Scripts
                 case PiecePositions.pos0:
                     blocksInPiece[0].transform.position = blockPositions[0].position;
                     blocksInPiece[1].transform.position = blockPositions[1].position;
-                    currentCollider = horrizontalCollider;
-                    horrizontalCollider.gameObject.SetActive(true);
-                    verticalCollider.gameObject.SetActive(false);
                     break;
                 case PiecePositions.pos1:
                     blocksInPiece[0].transform.position = blockPositions[0].position;
                     blocksInPiece[1].transform.position = blockPositions[2].position;
-                    currentCollider = verticalCollider;
-                    horrizontalCollider.gameObject.SetActive(false);
-                    verticalCollider.gameObject.SetActive(true);
                     break;
                 case PiecePositions.pos2:
                     blocksInPiece[0].transform.position = blockPositions[1].position;
                     blocksInPiece[1].transform.position = blockPositions[0].position;
-                    currentCollider = horrizontalCollider;
-                    horrizontalCollider.gameObject.SetActive(true);
-                    verticalCollider.gameObject.SetActive(false);
                     break;
                 case PiecePositions.pos3:
                     blocksInPiece[0].transform.position = blockPositions[2].position;
                     blocksInPiece[1].transform.position = blockPositions[0].position;
-                    currentCollider = verticalCollider;
-                    horrizontalCollider.gameObject.SetActive(false);
-                    verticalCollider.gameObject.SetActive(true);
                     break;
             }
         }
@@ -294,12 +304,6 @@ namespace YY_Games_Scripts
         private void FixedUpdate()
         {
             //hitDetect = Physics2D.BoxCast(currentCollider.bounds.center,currentCollider.transform.localScale,transform.forward,out)
-        }
-        void OnDrawGizmos()
-        {
-            // Draw a yellow sphere at the transform's position
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawCube(currentCollider.bounds.center - new Vector3(0f, 1f, 0f), currentCollider.bounds.size);
         }
         #endregion
     }
