@@ -33,6 +33,8 @@ namespace YY_Games_Scripts
         public BoxCollider2D horrizontalCollider;
         public BoxCollider2D verticalCollider;
         public bool canMoveDown = true;
+        public bool canMoveLeft = true;
+        public bool canMoveRight = true;
 
         public enum PiecePositions
         {
@@ -67,22 +69,34 @@ namespace YY_Games_Scripts
             {
                 if (transform.localPosition.x > -4.5f && Input.GetKey(KeyCode.A))
                 {
-                    transform.position += new Vector3(-1, 0, 0);
+                    if (canMoveLeft)
+                    {
+                        transform.position += new Vector3(-1, 0, 0);
+                    }
                 }
                 else if (transform.localPosition.x < 3.5f && Input.GetKey(KeyCode.D))
                 {
-                    transform.position += new Vector3(1, 0, 0);
+                    if (canMoveRight)
+                    {
+                        transform.position += new Vector3(1, 0, 0);
+                    }
                 }
             }
             else
             {
                 if (transform.localPosition.x > -4.5f && Input.GetKey(KeyCode.A))
                 {
-                    transform.position += new Vector3(-1, 0, 0);
+                    if (canMoveLeft)
+                    {
+                        transform.position += new Vector3(-1, 0, 0);
+                    }
                 }
                 else if (transform.localPosition.x < 4.5f && Input.GetKey(KeyCode.D))
                 {
-                    transform.position += new Vector3(1, 0, 0);
+                    if (canMoveRight)
+                    {
+                        transform.position += new Vector3(1, 0, 0);
+                    }
                 }
             }
         }
@@ -228,6 +242,7 @@ namespace YY_Games_Scripts
             yield return new WaitForSeconds(lockDelay);
             isPieceLocked = true;
         }
+
         #endregion
         #region Unity Functions
         void Start()
@@ -275,6 +290,10 @@ namespace YY_Games_Scripts
                 //    }
                 //}
             }
+        }
+        private void FixedUpdate()
+        {
+            //hitDetect = Physics2D.BoxCast(currentCollider.bounds.center,currentCollider.transform.localScale,transform.forward,out)
         }
         void OnDrawGizmos()
         {

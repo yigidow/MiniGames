@@ -29,8 +29,9 @@ namespace YY_Games_Scripts
 
         [Header("Spawned Piece Variables")]
         [SerializeField] private Piece pieceToSpawn;
-        [SerializeField] private GameObject spawnedPiece;
         [SerializeField] private Transform pieceSpawnPos;
+        [SerializeField] private GameObject spawnedPiece;
+        [SerializeField] private Vector2 spawnedPiecePos;
         [SerializeField] private float pieceSpeed;
 
         #endregion
@@ -194,7 +195,105 @@ namespace YY_Games_Scripts
             //Set the piece fall down speed
             spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
         }
+        private void CheckPiecePos()
+        {
+            spawnedPiecePos = spawnedPiece.transform.position;
 
+            for (int i = 0; i < columns - 1; i++)
+            {
+                for (int j = 0; j < rows - 1; j++)
+                {
+                    //Horrizontal Pos
+                    if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
+                    {
+                        //Check Down 
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x
+                            || boardGrid[i + 1, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i + 1, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i + 1, j].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveDown = false;
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveDown = true;
+
+                            }
+                        }
+                        //Check left
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x - 1)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveLeft = true;
+
+                            }
+                        }
+                        //Check Right 
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 2)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveRight = false;
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveRight = true;
+
+                            }
+                        }
+                    }
+                    //Vertical Pos
+                    else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
+                    {
+                        //Check Down 
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 2 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveDown = false;
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveDown = true;                        
+                            }
+                        }
+                        //Check left
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x - 1)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j -1].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
+                                Debug.Log("Left test");
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveLeft = true;  
+
+                            }
+                        }
+                        //Check Right
+                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 1)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveRight = false;
+                                Debug.Log("Right test");
+                            }
+                            else
+                            {
+                                spawnedPiece.GetComponent<Piece>().canMoveRight = true;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
         #endregion
         #region Unity Functions
         private void Awake()
@@ -212,6 +311,7 @@ namespace YY_Games_Scripts
         // Update is called once per frame
         void Update()
         {
+            CheckPiecePos();
         }
         #endregion
     }
