@@ -19,7 +19,7 @@ namespace YY_Games_Scripts
         [Header("Movement Variables")]
         public float stepDelay = 5f;
         public float moveDelay = 0.1f;
-        public float lockDelay = 0.5f;
+        public float lockDelay = 2.5f;
         private float stepTime;
         private float moveTime;
         private float lockTime;
@@ -279,10 +279,35 @@ namespace YY_Games_Scripts
         #endregion
 
         #region Functions to Interact with board
-        public IEnumerator LockPiece()
+        public void LockPiece()
         {
-            yield return new WaitForSeconds(lockDelay);
-            isPieceLocked = true;
+            if (!canMoveDown)
+            {
+                if (lockDelay >= 0)
+                {
+                    if (Input.GetKey(KeyCode.S))
+                    {
+                        lockDelay -= Time.time;
+                    }
+                    else
+                    {
+                        lockDelay -= Time.deltaTime;
+                    }
+                }
+                else
+                {
+                    lockDelay = 0;
+                }
+            }
+            else
+            {
+                lockDelay = 2.5f;
+            }
+            if(lockDelay <= 0f)
+            {
+                lockDelay = 0;
+                isPieceLocked = true;
+            }      
         }
 
         #endregion
@@ -329,18 +354,10 @@ namespace YY_Games_Scripts
                     if (canMoveDown)
                     {
                         MoveVerticalFreeFall();
-                        isPieceLocked = false;
-                    }
-                    else
-                    {
-                        StartCoroutine(LockPiece());
                     }
                 }
             }
-            if (canMoveDown)
-            {
-                isPieceLocked = false;
-            }
+            LockPiece();
         }
         #endregion
     }

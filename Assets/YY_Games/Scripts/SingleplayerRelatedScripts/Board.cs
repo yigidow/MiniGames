@@ -379,7 +379,7 @@ namespace YY_Games_Scripts
         }
         private IEnumerator SpawnPiece()
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(0.5f);
             SpawnPieceAtStart();
         }
         #endregion
