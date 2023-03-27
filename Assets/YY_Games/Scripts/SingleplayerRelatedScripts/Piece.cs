@@ -19,7 +19,7 @@ namespace YY_Games_Scripts
         [Header("Movement Variables")]
         public float stepDelay = 5f;
         public float moveDelay = 0.1f;
-        public float lockDelay = 5f;
+        public float lockDelay = 0.5f;
         private float stepTime;
         private float moveTime;
         private float lockTime;
@@ -151,6 +151,11 @@ namespace YY_Games_Scripts
                 {
                     currentPosition = PiecePositions.pos1;
                 }
+                //Bot Wall Kick
+                if (transform.localPosition.y == -10)
+                {
+                    transform.position += new Vector3(0, 1, 0);
+                }
             }
             else if (currentPosition == PiecePositions.pos1)
             {
@@ -170,6 +175,11 @@ namespace YY_Games_Scripts
                 if (canRotateToVertical)
                 {
                     currentPosition = PiecePositions.pos3;
+                }
+                //Bot Wall Kick
+                if (transform.localPosition.y == -10)
+                {
+                    transform.position += new Vector3(0, 1, 0);
                 }
             }
             else if (currentPosition == PiecePositions.pos3)
@@ -196,6 +206,11 @@ namespace YY_Games_Scripts
                 {
                     currentPosition = PiecePositions.pos3;
                 }
+                //Bot Wall Kick
+                if (transform.localPosition.y == -10)
+                {
+                    transform.position += new Vector3(0, 1, 0);
+                }
             }
             else if (currentPosition == PiecePositions.pos1)
             {
@@ -215,6 +230,11 @@ namespace YY_Games_Scripts
                 if (canRotateToVertical)
                 {
                     currentPosition = PiecePositions.pos1;
+                }
+                //Bot Wall Kick
+                if (transform.localPosition.y == -10)
+                {
+                    transform.position += new Vector3(0, 1, 0);
                 }
             }
             else if (currentPosition == PiecePositions.pos3)
@@ -261,17 +281,8 @@ namespace YY_Games_Scripts
         #region Functions to Interact with board
         public IEnumerator LockPiece()
         {
-            lockTime = Time.time + lockDelay;
-            if (!canMoveDown)
-            {
-                yield return new WaitForSeconds(lockDelay);
-                isPieceLocked = true;
-            }
-            else
-            {
-                lockTime = 0;
-                isPieceLocked = false;
-            }
+            yield return new WaitForSeconds(lockDelay);
+            isPieceLocked = true;
         }
 
         #endregion
@@ -318,13 +329,17 @@ namespace YY_Games_Scripts
                     if (canMoveDown)
                     {
                         MoveVerticalFreeFall();
+                        isPieceLocked = false;
+                    }
+                    else
+                    {
+                        StartCoroutine(LockPiece());
                     }
                 }
             }
-
-            if (Time.time > lockTime)
+            if (canMoveDown)
             {
-                 StartCoroutine(LockPiece());
+                isPieceLocked = false;
             }
         }
         #endregion

@@ -133,7 +133,7 @@ namespace YY_Games_Scripts
                     }
                     else
                     {
-                        if (counter < maxBlockCount && grid.GetComponent<Grid>().positionOfGrid.y <= 5)
+                        if (counter < maxBlockCount && grid.GetComponent<Grid>().positionOfGrid.y <= 4)
                         {
                             grid.GetComponent<Grid>().hasBlock = true;
                             grid.GetComponent<Grid>().colorCode = randomColor;
@@ -182,18 +182,21 @@ namespace YY_Games_Scripts
         #region Functions to Spawn Playable Pieces and Control It
         private void SpawnPieceAtStart()
         {
-            //Spawn the piece
-            spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2) pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
-
-            //Set piece blocks randomly
-            for(int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
+            if(spawnedPiece == null)
             {
-                int rand = Random.Range(0, boxColorCount);
-                spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = blocks[rand];
-            }
+                //Spawn the piece
+                spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
-            //Set the piece fall down speed
-            spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+                //Set piece blocks randomly
+                for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
+                {
+                    int rand = Random.Range(0, boxColorCount);
+                    spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = blocks[rand];
+                }
+
+                //Set the piece fall down speed
+                spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+            }
         }
         private void CheckPiecePos()
         {
@@ -366,8 +369,18 @@ namespace YY_Games_Scripts
                             }
                         }
                     }
+                    spawnedPiece = null;
                 }
             }
+            else
+            {
+                StartCoroutine(SpawnPiece());
+            }
+        }
+        private IEnumerator SpawnPiece()
+        {
+            yield return new WaitForSeconds(1.5f);
+            SpawnPieceAtStart();
         }
         #endregion
         #region Unity Functions
