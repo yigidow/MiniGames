@@ -200,11 +200,19 @@ namespace YY_Games_Scripts
         }
         private void CheckPiecePos()
         {
+            int x = 0;
             if(spawnedPiece != null)
             {
                 spawnedPiecePos = spawnedPiece.transform.position;
-
-                for (int i = 0; i < columns - 1; i++)
+                if(spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
+                {
+                    x = 1;
+                }
+                else
+                {
+                    x = 0;
+                }
+                for (int i = 0; i < columns - x; i++) 
                 {
                     for (int j = 0; j < rows - 1; j++)
                     {
