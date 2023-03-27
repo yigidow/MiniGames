@@ -1373,8 +1373,9 @@ MonoBehaviour:
   blockDensity: 0
   boxColorCount: 3
   pieceToSpawn: {fileID: 4772244216607415801, guid: 3ba4820ccedd3674cbb3ee9b3a7277ab, type: 3}
-  spawnedPiece: {fileID: 0}
   pieceSpawnPos: {fileID: 1914817686}
+  spawnedPiece: {fileID: 0}
+  spawnedPiecePos: {x: 0, y: 0}
   pieceSpeed: 0
 --- !u!4 &1829439985
 Transform:

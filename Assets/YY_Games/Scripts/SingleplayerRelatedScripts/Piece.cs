@@ -19,10 +19,10 @@ namespace YY_Games_Scripts
         [Header("Movement Variables")]
         public float stepDelay = 5f;
         public float moveDelay = 0.1f;
-        public float lockDelay = 1f;
+        public float lockDelay = 5f;
         private float stepTime;
         private float moveTime;
-        private bool isPieceLocked = false;
+        private float lockTime;
 
         [Header("Rotation Variables")]
         public float rotateDelay = 0.1f;
@@ -35,6 +35,8 @@ namespace YY_Games_Scripts
 
         public bool canRotateToHorizontal = true;
         public bool canRotateToVertical = true;
+
+        public bool isPieceLocked = false;
 
         public enum PiecePositions
         {
@@ -102,9 +104,19 @@ namespace YY_Games_Scripts
         {
             stepTime = Time.time + stepDelay;
             transform.localPosition += new Vector3(0, -1, 0);
-            if (transform.position.y == -10)
+            if (currentPosition == PiecePositions.pos1 || currentPosition == PiecePositions.pos3)
             {
-                isPieceLocked = true;
+                if (transform.position.y == -9)
+                {
+                    canMoveDown = false;
+                }
+            }
+            else
+            {
+                if (transform.position.y == -10)
+                {
+                    canMoveDown = false;
+                }
             }
         }
         private void MoveVertical()
@@ -118,14 +130,14 @@ namespace YY_Games_Scripts
             {
                 if (transform.position.y == -9)
                 {
-                    isPieceLocked = true;
+                    canMoveDown = false;
                 }
             }
             else
             {
                 if (transform.position.y == -10)
                 {
-                    isPieceLocked = true;
+                    canMoveDown = false;
                 }
             }
         }
@@ -249,8 +261,17 @@ namespace YY_Games_Scripts
         #region Functions to Interact with board
         public IEnumerator LockPiece()
         {
-            yield return new WaitForSeconds(lockDelay);
-            isPieceLocked = true;
+            lockTime = Time.time + lockDelay;
+            if (!canMoveDown)
+            {
+                yield return new WaitForSeconds(lockDelay);
+                isPieceLocked = true;
+            }
+            else
+            {
+                lockTime = 0;
+                isPieceLocked = false;
+            }
         }
 
         #endregion
@@ -292,18 +313,19 @@ namespace YY_Games_Scripts
                 }
 
                 //Handling free fall
-                //if (Time.time > stepTime)
-                //{
-                //    if (canMoveDown)
-                //    {
-                //        MoveVerticalFreeFall();
-                //    }
-                //}
+                if (Time.time > stepTime)
+                {
+                    if (canMoveDown)
+                    {
+                        MoveVerticalFreeFall();
+                    }
+                }
             }
-        }
-        private void FixedUpdate()
-        {
-            //hitDetect = Physics2D.BoxCast(currentCollider.bounds.center,currentCollider.transform.localScale,transform.forward,out)
+
+            if (Time.time > lockTime)
+            {
+                 StartCoroutine(LockPiece());
+            }
         }
         #endregion
     }

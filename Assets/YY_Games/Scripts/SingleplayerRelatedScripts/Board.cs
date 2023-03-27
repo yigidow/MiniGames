@@ -50,11 +50,11 @@ namespace YY_Games_Scripts
                     break;
                 case 2:
                     blockDensity = 5;
-                    maxBlockCount = 50;
+                    maxBlockCount = 35;
                     break;
                 case 3:
                     blockDensity = 6;
-                    maxBlockCount = 100;
+                    maxBlockCount = 50;
                     break;
             }
             switch (difficulty)
@@ -100,7 +100,7 @@ namespace YY_Games_Scripts
                     //Setting the position of grid
                     Vector2 tempPos = new Vector2(i, j);
                     GameObject grid = Instantiate(gridCell, (Vector2)gridStartPos.position + tempPos, Quaternion.identity, gridParent.transform);
-                    grid.GetComponent<Grid>().positionOfGrid.Set(grid.transform.position.x, grid.transform.position.y, grid.transform.position.z);
+                    grid.GetComponent<Grid>().positionOfGrid.Set(grid.transform.position.x, grid.transform.position.y);
                     grid.gameObject.name = "("+ i + "," + j +")";
                     boardGrid[i, j] = grid;
 
@@ -179,8 +179,8 @@ namespace YY_Games_Scripts
             }
         }
         #endregion
-        #region Functions to Spawn Playable Pieces
-        private void SpawnPiece()
+        #region Functions to Spawn Playable Pieces and Control It
+        private void SpawnPieceAtStart()
         {
             //Spawn the piece
             spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2) pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
@@ -197,121 +197,172 @@ namespace YY_Games_Scripts
         }
         private void CheckPiecePos()
         {
-            spawnedPiecePos = spawnedPiece.transform.position;
-
-            for (int i = 0; i < columns - 1; i++)
+            if(spawnedPiece != null)
             {
-                for (int j = 0; j < rows - 1; j++)
+                spawnedPiecePos = spawnedPiece.transform.position;
+
+                for (int i = 0; i < columns - 1; i++)
                 {
-                    //Horrizontal Pos
-                    if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
+                    for (int j = 0; j < rows - 1; j++)
                     {
-                        //Check Down 
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x
-                            || boardGrid[i + 1, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i + 1, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
+                        //Horrizontal Pos
+                        if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
                         {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i + 1, j].GetComponent<Grid>().hasBlock)
+                            //Check Down 
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x
+                                || boardGrid[i + 1, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i + 1, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveDown = false;
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i + 1, j].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveDown = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveDown = true;
+                                }
                             }
-                            else
+                            //Check left
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x - 1)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveDown = true;
-
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveLeft = true;
+                                }
+                            }
+                            //Check Right 
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 2)
+                            {
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveRight = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveRight = true;
+                                }
+                            }
+                            //Check Rotation
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 1 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
+                            {
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canRotateToVertical = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canRotateToVertical = true;
+                                }
                             }
                         }
-                        //Check left
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x - 1)
+                        //Vertical Pos
+                        else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
                         {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            //Check Down 
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 2 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveDown = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveDown = true;
+                                }
                             }
-                            else
+                            //Check left
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x - 1)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveLeft = true;
-
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveLeft = true;
+                                }
                             }
-                        }
-                        //Check Right 
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 2)
-                        {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            //Check Right
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 1)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveRight = false;
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveRight = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canMoveRight = true;
+                                }
                             }
-                            else
+                            //Check Rotation
+                            if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 1)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveRight = true;
-
-                            }
-                        }
-                        //Check Rotation
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y -1 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
-                        {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
-                            {
-                                spawnedPiece.GetComponent<Piece>().canRotateToVertical = false;
-                            }
-                            else
-                            {
-                                spawnedPiece.GetComponent<Piece>().canRotateToVertical = true;
-
+                                if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canRotateToHorizontal = false;
+                                }
+                                else
+                                {
+                                    spawnedPiece.GetComponent<Piece>().canRotateToHorizontal = true;
+                                }
                             }
                         }
                     }
-                    //Vertical Pos
-                    else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
+                }
+            }
+        }
+        private void LockPieceToBoard()
+        {
+            if(spawnedPiece != null)
+            {
+                if (spawnedPiece.GetComponent<Piece>().isPieceLocked)
+                {
+                    for (int i = 0; i < columns; i++)
                     {
-                        //Check Down 
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y - 2 && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x)
+                        for (int j = 0; j < rows -1; j++)
                         {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                            //Horrizontal
+                            if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveDown = false;
+                                if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid == spawnedPiecePos)
+                                {
+                                    for (int k = 0; k < boxColorCount; k++)
+                                    {
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[0].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                                        }
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[1].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i + 1, j].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i + 1, j].GetComponent<Grid>().colorCode = k;
+                                        }
+                                    }
+                                }
                             }
-                            else
+                           //Vertical
+                           else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
                             {
-                                spawnedPiece.GetComponent<Piece>().canMoveDown = true;                        
-                            }
-                        }
-                        //Check left
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x - 1)
-                        {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j -1].GetComponent<Grid>().hasBlock)
-                            {
-                                spawnedPiece.GetComponent<Piece>().canMoveLeft = false;
-                            }
-                            else
-                            {
-                                spawnedPiece.GetComponent<Piece>().canMoveLeft = true;  
-
-                            }
-                        }
-                        //Check Right
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 1)
-                        {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock || boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
-                            {
-                                spawnedPiece.GetComponent<Piece>().canMoveRight = false;
-                            }
-                            else
-                            {
-                                spawnedPiece.GetComponent<Piece>().canMoveRight = true;
-
-                            }
-                        }
-                        //Check Rotation
-                        if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid.y == spawnedPiecePos.y && boardGrid[i, j].GetComponent<Grid>().positionOfGrid.x == spawnedPiecePos.x + 1)
-                        {
-                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
-                            {
-                                spawnedPiece.GetComponent<Piece>().canRotateToHorizontal = false;
-                            }
-                            else
-                            {
-                                spawnedPiece.GetComponent<Piece>().canRotateToHorizontal = true;
-
+                                if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid == spawnedPiecePos)
+                                {
+                                    for (int k = 0; k < boxColorCount; k++)
+                                    {
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[0].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                                        }
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[1].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i, j-1].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j-1].GetComponent<Grid>().colorCode = k;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -329,13 +380,14 @@ namespace YY_Games_Scripts
             SetUpBoardGrind();
             FixRowBoxColour();
             FillUpBoardRandomly();
-            SpawnPiece();
+            SpawnPieceAtStart();
         }
 
         // Update is called once per frame
         void Update()
         {
             CheckPiecePos();
+            LockPieceToBoard();
         }
         #endregion
     }
