@@ -46,7 +46,7 @@ namespace YY_Games_Scripts
             {
                 case 1:
                     blockDensity = 4;
-                    maxBlockCount = 25;
+                    maxBlockCount = 1;
                     break;
                 case 2:
                     blockDensity = 5;
@@ -325,10 +325,10 @@ namespace YY_Games_Scripts
                 {
                     for (int i = 0; i < columns; i++)
                     {
-                        for (int j = 0; j < rows -1; j++)
+                        for (int j = 0; j < rows; j++)
                         {
                             //Horrizontal
-                            if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
+                            if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos0)
                             {
                                 if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid == spawnedPiecePos)
                                 {
@@ -338,17 +338,40 @@ namespace YY_Games_Scripts
                                         {
                                             boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
                                             boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[0].transform.SetParent(boardGrid[i, j].transform);
                                         }
                                         if (spawnedPiece.GetComponent<Piece>().blocksInPiece[1].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
                                         {
                                             boardGrid[i + 1, j].GetComponent<Grid>().hasBlock = true;
                                             boardGrid[i + 1, j].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[1].transform.SetParent(boardGrid[i+1, j].transform);
                                         }
                                     }
                                 }
                             }
-                           //Vertical
-                           else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1 || spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
+                            else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos2)
+                            {
+                                if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid == spawnedPiecePos)
+                                {
+                                    for (int k = 0; k < boxColorCount; k++)
+                                    {
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[1].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[1].transform.SetParent(boardGrid[i, j].transform);
+                                        }
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[0].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i + 1, j].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i + 1, j].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[0].transform.SetParent(boardGrid[i+1, j].transform);
+                                        }
+                                    }
+                                }
+                            }
+                            //Vertical
+                            else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos1)
                             {
                                 if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid == spawnedPiecePos)
                                 {
@@ -358,11 +381,34 @@ namespace YY_Games_Scripts
                                         {
                                             boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
                                             boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[0].transform.SetParent(boardGrid[i, j].transform);
                                         }
                                         if (spawnedPiece.GetComponent<Piece>().blocksInPiece[1].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
                                         {
-                                            boardGrid[i, j-1].GetComponent<Grid>().hasBlock = true;
-                                            boardGrid[i, j-1].GetComponent<Grid>().colorCode = k;
+                                            boardGrid[i, j - 1].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j - 1].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[1].transform.SetParent(boardGrid[i, j-1].transform);
+                                        }
+                                    }
+                                }
+                            }
+                            else if (spawnedPiece.GetComponent<Piece>().currentPosition == Piece.PiecePositions.pos3)
+                            {
+                                if (boardGrid[i, j].GetComponent<Grid>().positionOfGrid == spawnedPiecePos)
+                                {
+                                    for (int k = 0; k < boxColorCount; k++)
+                                    {
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[1].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[1].transform.SetParent(boardGrid[i, j].transform);
+                                        }
+                                        if (spawnedPiece.GetComponent<Piece>().blocksInPiece[0].GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                                        {
+                                            boardGrid[i, j - 1].GetComponent<Grid>().hasBlock = true;
+                                            boardGrid[i, j - 1].GetComponent<Grid>().colorCode = k;
+                                            spawnedPiece.GetComponent<Piece>().blocksInPiece[0].transform.SetParent(boardGrid[i, j-1].transform);
                                         }
                                     }
                                 }
@@ -383,6 +429,56 @@ namespace YY_Games_Scripts
             SpawnPieceAtStart();
         }
         #endregion
+        #region Functions to Find Same 4
+        private void FindFour()
+        {
+            for (int i = 0; i < columns - 3; i++)
+            {
+                for (int j = 0; j < rows - 3; j++)
+                {
+                    if (boardGrid[i, j].GetComponent<Grid>().hasBlock &&
+                        boardGrid[i + 1, j].GetComponent<Grid>().hasBlock &&
+                        boardGrid[i + 2, j].GetComponent<Grid>().hasBlock &&
+                        boardGrid[i + 3, j].GetComponent<Grid>().hasBlock)
+                    {
+                        if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 1, j].GetComponent<Grid>().colorCode &&
+                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 2, j].GetComponent<Grid>().colorCode &&
+                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 3, j].GetComponent<Grid>().colorCode)
+                        {
+                            boardGrid[i, j].GetComponent<Grid>().hasBlock = false;
+                            boardGrid[i + 1, j].GetComponent<Grid>().hasBlock = false;
+                            boardGrid[i + 2, j].GetComponent<Grid>().hasBlock = false;
+                            boardGrid[i + 3, j].GetComponent<Grid>().hasBlock = false;
+                            Destroy(boardGrid[i, j].transform.GetChild(0).gameObject);
+                            Destroy(boardGrid[i+1, j].transform.GetChild(0).gameObject);
+                            Destroy(boardGrid[i+2, j].transform.GetChild(0).gameObject);
+                            Destroy(boardGrid[i+3, j].transform.GetChild(0).gameObject);
+                        }
+                    }
+                    if (boardGrid[i, j].GetComponent<Grid>().hasBlock &&
+                       boardGrid[i, j + 1].GetComponent<Grid>().hasBlock &&
+                       boardGrid[i, j + 2].GetComponent<Grid>().hasBlock &&
+                       boardGrid[i, j + 3].GetComponent<Grid>().hasBlock)
+                    {
+                        if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, j + 1].GetComponent<Grid>().colorCode &&
+                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, j + 2].GetComponent<Grid>().colorCode &&
+                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, j + 3].GetComponent<Grid>().colorCode)
+                        {
+                            boardGrid[i, j].GetComponent<Grid>().hasBlock = false;
+                            boardGrid[i, j+1].GetComponent<Grid>().hasBlock = false;
+                            boardGrid[i, j+2].GetComponent<Grid>().hasBlock = false;
+                            boardGrid[i, j+3].GetComponent<Grid>().hasBlock = false;
+                            Destroy(boardGrid[i, j].transform.GetChild(0).gameObject);
+                            Destroy(boardGrid[i, j+1].transform.GetChild(0).gameObject);
+                            Destroy(boardGrid[i, j+2].transform.GetChild(0).gameObject);
+                            Destroy(boardGrid[i, j+3].transform.GetChild(0).gameObject);
+                        }
+                    }
+                }
+            }
+        }
+        
+        #endregion
         #region Unity Functions
         private void Awake()
         {
@@ -401,6 +497,8 @@ namespace YY_Games_Scripts
         {
             CheckPiecePos();
             LockPieceToBoard();
+
+            FindFour();
         }
         #endregion
     }
