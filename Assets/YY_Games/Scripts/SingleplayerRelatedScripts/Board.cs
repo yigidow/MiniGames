@@ -437,42 +437,41 @@ namespace YY_Games_Scripts
                 FindMatchInColumns();
                 FindMatchInRows();
                 StartCoroutine(SpawnPiece());
-                //StartCoroutine(ShowNextPiece());
+                StartCoroutine(ShowNextPiece());
             }
         }
         private IEnumerator SpawnPiece()
         {
             yield return new WaitForSeconds(0.5f);
-            SpawnPieceAtStart();
-            //if (spawnedPiece == null)
-            //{
-            //    //Spawn the piece
-            //    spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
-            //    //Set piece according to next Piece
-            //    for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
-            //    {
-            //        int rand = Random.Range(0, boxColorCount);
-            //        spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = blocks[rand];
-            //        spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i].GetComponent<SpriteRenderer>().sprite = 
-            //            nextPiece.gameObject.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
-            //    }
+            if (spawnedPiece == null)
+            {
+                //Spawn the piece
+                spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
-            //    //Set the piece fall down speed
-            //    spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
-            //}
+                //Set piece according to next Piece
+                for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
+                {
+                    int rand = Random.Range(0, boxColorCount);
+                    spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = nextPiece.GetComponent<NextPiece>().blocksInNextPiece[i];
+                }
+
+                //Set the piece fall down speed
+                spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+            }
         }
         #endregion
         #region Functions to Shown next piece comming and holding a piece
-        //private IEnumerator ShowNextPiece()
-        //{
-        //    yield return new WaitForSeconds(0.5f);
-        //    for (int i = 0; i < nextPiece.gameObject.transform.childCount; i++)
-        //    {
-        //        int rand = Random.Range(0, boxColorCount +1);
-        //        nextPiece.gameObject.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = blocks[rand].GetComponent<SpriteRenderer>().sprite;
-        //    }
-        //}
+        private IEnumerator ShowNextPiece()
+        {
+            yield return new WaitForSeconds(1f);
+            for (int i = 0; i < nextPiece.GetComponent<NextPiece>().blocksInNextPiece.Length; i++)
+            {
+                int rand = Random.Range(0, boxColorCount);
+                nextPiece.GetComponent<NextPiece>().blocksInNextPiece[i] = blocks[rand];
+            }
+            nextPiece.GetComponent<NextPiece>().Init();
+        }
         #endregion
         #region Functions to Find Same 4
         public void FindMatchInColumns()
@@ -627,7 +626,8 @@ namespace YY_Games_Scripts
             FixRowBoxColour();
             FillUpBoardRandomly();
             SpawnPieceAtStart();
-            //ShowNextPiece();
+
+            StartCoroutine(ShowNextPiece());
         }
 
         // Update is called once per frame
@@ -635,9 +635,6 @@ namespace YY_Games_Scripts
         {
             CheckPiecePos();
             LockPieceToBoard();
-
-            //FindMatchInColumns();
-            //FindMatchInRows();
         }
         #endregion
     }
