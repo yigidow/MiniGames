@@ -8,32 +8,38 @@ namespace YY_Games_Scripts
     {
         #region Variables and References
         [Header("Game Values")]
-        [SerializeField] private BoxCollider2D border;
         [SerializeField] private static int rows = 20;
         [SerializeField] private static int columns = 10;
-        [SerializeField] private int difficulty;
-        [SerializeField] private int density;
-        [SerializeField] private float speed;
+        private int difficulty;
+        private int density;
+        private float speed;
 
         [Header("Board Grid Components")]
         [SerializeField] private GameObject gridCell;
         [SerializeField] private Transform gridStartPos;
         [SerializeField] private GameObject gridParent;
-        [SerializeField] public GameObject[,] boardGrid = new GameObject[columns, rows];
+        public GameObject[,] boardGrid = new GameObject[columns, rows];
 
         [Header("Block Variables")]
         [SerializeField] private List<GameObject> blocks = new List<GameObject>();
-        [SerializeField] private int maxBlockCount;
-        [SerializeField] private int blockDensity;
-        [SerializeField] private int boxColorCount;
+        private int maxBlockCount;
+        private int blockDensity;
+        private int boxColorCount;
 
         [Header("Spawned Piece Variables")]
         [SerializeField] private Piece pieceToSpawn;
         [SerializeField] private Transform pieceSpawnPos;
         [SerializeField] private GameObject spawnedPiece;
-        [SerializeField] private Vector2 spawnedPiecePos;
-        [SerializeField] private float pieceSpeed;
+        private Vector2 spawnedPiecePos;
+        private float pieceSpeed;
 
+        [Header("Next and Holded Pieces")]
+        [SerializeField] private GameObject nextPiece;
+        [SerializeField] private GameObject holdedPiece;
+
+        [Header("Lists to hold match blocks")]
+        private List<GameObject> matchColumns = new List<GameObject>();
+        private List<GameObject> matchRows = new List<GameObject>();
         #endregion
         #region Functions to set up the board at start
 
@@ -46,7 +52,7 @@ namespace YY_Games_Scripts
             {
                 case 1:
                     blockDensity = 4;
-                    maxBlockCount = 1;
+                    maxBlockCount = 2;
                     break;
                 case 2:
                     blockDensity = 5;
@@ -143,7 +149,6 @@ namespace YY_Games_Scripts
                     }
                 }
             }
-            Debug.Log(counter);
         }
         private void FillUpBoardRandomly()
         {
@@ -423,69 +428,193 @@ namespace YY_Games_Scripts
                             }
                         }
                     }
+                    Destroy(spawnedPiece.gameObject);
                     spawnedPiece = null;
                 }
             }
             else
             {
+                FindMatchInColumns();
+                FindMatchInRows();
                 StartCoroutine(SpawnPiece());
+                //StartCoroutine(ShowNextPiece());
             }
         }
         private IEnumerator SpawnPiece()
         {
             yield return new WaitForSeconds(0.5f);
             SpawnPieceAtStart();
+            //if (spawnedPiece == null)
+            //{
+            //    //Spawn the piece
+            //    spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
+
+            //    //Set piece according to next Piece
+            //    for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
+            //    {
+            //        int rand = Random.Range(0, boxColorCount);
+            //        spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = blocks[rand];
+            //        spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i].GetComponent<SpriteRenderer>().sprite = 
+            //            nextPiece.gameObject.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite;
+            //    }
+
+            //    //Set the piece fall down speed
+            //    spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+            //}
         }
         #endregion
+        #region Functions to Shown next piece comming and holding a piece
+        //private IEnumerator ShowNextPiece()
+        //{
+        //    yield return new WaitForSeconds(0.5f);
+        //    for (int i = 0; i < nextPiece.gameObject.transform.childCount; i++)
+        //    {
+        //        int rand = Random.Range(0, boxColorCount +1);
+        //        nextPiece.gameObject.transform.GetChild(i).GetComponent<SpriteRenderer>().sprite = blocks[rand].GetComponent<SpriteRenderer>().sprite;
+        //    }
+        //}
+        #endregion
         #region Functions to Find Same 4
-        private void FindFour()
+        public void FindMatchInColumns()
         {
-            for (int i = 0; i < columns - 3; i++)
+            int countColumns = 0;
+            for (int i = 0; i < columns; i++)
             {
-                for (int j = 0; j < rows - 3; j++)
+                for (int j = 0; j < rows - 1; j++)
                 {
-                    if (boardGrid[i, j].GetComponent<Grid>().hasBlock &&
-                        boardGrid[i + 1, j].GetComponent<Grid>().hasBlock &&
-                        boardGrid[i + 2, j].GetComponent<Grid>().hasBlock &&
-                        boardGrid[i + 3, j].GetComponent<Grid>().hasBlock)
+                    for (int k = 1; k < rows; k++)
                     {
-                        if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 1, j].GetComponent<Grid>().colorCode &&
-                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 2, j].GetComponent<Grid>().colorCode &&
-                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i + 3, j].GetComponent<Grid>().colorCode)
+                        if ((j + 1) == k)
                         {
-                            boardGrid[i, j].GetComponent<Grid>().hasBlock = false;
-                            boardGrid[i + 1, j].GetComponent<Grid>().hasBlock = false;
-                            boardGrid[i + 2, j].GetComponent<Grid>().hasBlock = false;
-                            boardGrid[i + 3, j].GetComponent<Grid>().hasBlock = false;
-                            Destroy(boardGrid[i, j].transform.GetChild(0).gameObject);
-                            Destroy(boardGrid[i+1, j].transform.GetChild(0).gameObject);
-                            Destroy(boardGrid[i+2, j].transform.GetChild(0).gameObject);
-                            Destroy(boardGrid[i+3, j].transform.GetChild(0).gameObject);
-                        }
-                    }
-                    if (boardGrid[i, j].GetComponent<Grid>().hasBlock &&
-                       boardGrid[i, j + 1].GetComponent<Grid>().hasBlock &&
-                       boardGrid[i, j + 2].GetComponent<Grid>().hasBlock &&
-                       boardGrid[i, j + 3].GetComponent<Grid>().hasBlock)
-                    {
-                        if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, j + 1].GetComponent<Grid>().colorCode &&
-                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, j + 2].GetComponent<Grid>().colorCode &&
-                        boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, j + 3].GetComponent<Grid>().colorCode)
-                        {
-                            boardGrid[i, j].GetComponent<Grid>().hasBlock = false;
-                            boardGrid[i, j+1].GetComponent<Grid>().hasBlock = false;
-                            boardGrid[i, j+2].GetComponent<Grid>().hasBlock = false;
-                            boardGrid[i, j+3].GetComponent<Grid>().hasBlock = false;
-                            Destroy(boardGrid[i, j].transform.GetChild(0).gameObject);
-                            Destroy(boardGrid[i, j+1].transform.GetChild(0).gameObject);
-                            Destroy(boardGrid[i, j+2].transform.GetChild(0).gameObject);
-                            Destroy(boardGrid[i, j+3].transform.GetChild(0).gameObject);
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock && boardGrid[i, k].GetComponent<Grid>().hasBlock)
+                            {
+                                if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[i, k].GetComponent<Grid>().colorCode)
+                                { 
+                                    if (!matchColumns.Contains(boardGrid[i, j].transform.GetChild(0).gameObject))
+                                    {
+                                        matchColumns.Add(boardGrid[i, j].transform.GetChild(0).gameObject);
+                                        countColumns++;
+                                    }
+                                    if (!matchColumns.Contains(boardGrid[i, k].transform.GetChild(0).gameObject))
+                                    {
+                                        matchColumns.Add(boardGrid[i, k].transform.GetChild(0).gameObject);
+                                        countColumns++;
+                                    }
+                                }
+                                else
+                                {
+                                    if(countColumns >= 4)
+                                    {
+                                        foreach (GameObject blck in matchColumns)
+                                        {
+                                            blck.transform.GetComponentInParent<Grid>().hasBlock = false;
+                                            blck.transform.GetComponentInParent<Grid>().colorCode = -1;
+                                            Destroy(blck);
+                                            countColumns = 0;
+                                            matchColumns = new List<GameObject>();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        countColumns = 0;
+                                        matchColumns = new List<GameObject>();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (countColumns >= 4)
+                                {
+                                    foreach (GameObject blck in matchColumns)
+                                    {
+                                        blck.transform.GetComponentInParent<Grid>().hasBlock = false;
+                                        blck.transform.GetComponentInParent<Grid>().colorCode = -1;
+                                        Destroy(blck);
+                                        countColumns = 0;
+                                        matchColumns = new List<GameObject>();
+                                    }
+                                }
+                                else
+                                {
+                                    countColumns = 0;
+                                    matchColumns = new List<GameObject>();
+                                } 
+                            }
                         }
                     }
                 }
             }
         }
-        
+        private void FindMatchInRows()
+        {
+            int countRows = 0;
+            for (int j = 0; j < rows; j++)
+            {
+                for (int i = 0; i < columns-1; i++)
+                {
+                    for (int k = 1; k < columns; k++)
+                    {
+                        if ((i+ 1) == k)
+                        {
+                            if (boardGrid[i, j].GetComponent<Grid>().hasBlock && boardGrid[k, j].GetComponent<Grid>().hasBlock)
+                            {
+                                if (boardGrid[i, j].GetComponent<Grid>().colorCode == boardGrid[k, j].GetComponent<Grid>().colorCode)
+                                {
+                                    if (!matchRows.Contains(boardGrid[i, j].transform.GetChild(0).gameObject))
+                                    {
+                                        matchRows.Add(boardGrid[i, j].transform.GetChild(0).gameObject);
+                                        countRows++;
+                                    }
+                                    if (!matchRows.Contains(boardGrid[k, j].transform.GetChild(0).gameObject))
+                                    {
+                                        matchRows.Add(boardGrid[k, j].transform.GetChild(0).gameObject);
+                                        countRows++;
+                                    }
+                                }
+                                else
+                                {
+                                    if (countRows >= 4)
+                                    {
+                                        foreach (GameObject blck in matchRows)
+                                        {
+                                            blck.transform.GetComponentInParent<Grid>().hasBlock = false;
+                                            blck.transform.GetComponentInParent<Grid>().colorCode = -1;
+                                            Destroy(blck);
+                                            countRows = 0;
+                                            matchRows = new List<GameObject>();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        countRows = 0;
+                                        matchRows = new List<GameObject>();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (countRows >= 4)
+                                {
+                                    foreach (GameObject blck in matchRows)
+                                    {
+                                        blck.transform.GetComponentInParent<Grid>().hasBlock = false;
+                                        blck.transform.GetComponentInParent<Grid>().colorCode = -1;
+                                        Destroy(blck);
+                                        countRows = 0;
+                                        matchRows = new List<GameObject>();
+                                    }
+                                }
+                                else
+                                {
+                                    countRows = 0;
+                                    matchRows = new List<GameObject>();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
         #endregion
         #region Unity Functions
         private void Awake()
@@ -498,6 +627,7 @@ namespace YY_Games_Scripts
             FixRowBoxColour();
             FillUpBoardRandomly();
             SpawnPieceAtStart();
+            //ShowNextPiece();
         }
 
         // Update is called once per frame
@@ -506,7 +636,8 @@ namespace YY_Games_Scripts
             CheckPiecePos();
             LockPieceToBoard();
 
-            FindFour();
+            //FindMatchInColumns();
+            //FindMatchInRows();
         }
         #endregion
     }
