@@ -36,6 +36,7 @@ namespace YY_Games_Scripts
         [Header("Next and Holded Pieces")]
         [SerializeField] private GameObject nextPiece;
         [SerializeField] private GameObject holdedPiece;
+        private bool isThereAPieceHolded;
 
         [Header("Lists to hold match blocks")]
         private List<GameObject> matchColumns = new List<GameObject>();
@@ -472,6 +473,34 @@ namespace YY_Games_Scripts
             }
             nextPiece.GetComponent<NextPiece>().Init();
         }
+        private void HoldSpawnedPiece()
+        {
+            if (spawnedPiece != null)
+            {
+                holdedPiece.SetActive(true);
+                for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
+                {
+                    holdedPiece.GetComponent<HoldedPiece>().blocksInHoldedPiece[i] = spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i];
+                }
+                holdedPiece.GetComponent<HoldedPiece>().Init();
+                Destroy(spawnedPiece);
+                isThereAPieceHolded = true;
+            }
+        }
+        private void GetHoldedPiece()
+        {
+            if(spawnedPiece != null)
+            {
+                for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
+                {
+                    spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = holdedPiece.GetComponent<HoldedPiece>().blocksInHoldedPiece[i];
+                    Destroy(spawnedPiece.GetComponent<Piece>().blocksInPiece[i]);
+                }
+                spawnedPiece.GetComponent<Piece>().Initialize();
+                holdedPiece.SetActive(false);
+                isThereAPieceHolded = false;
+            }
+        }
         #endregion
         #region Functions to Find Same 4
         public void FindMatchInColumns()
@@ -635,6 +664,18 @@ namespace YY_Games_Scripts
         {
             CheckPiecePos();
             LockPieceToBoard();
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                if (!isThereAPieceHolded)
+                {
+                    HoldSpawnedPiece();
+                }
+                else
+                {
+                    GetHoldedPiece();
+                }
+            }
         }
         #endregion
     }

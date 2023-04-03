@@ -50,7 +50,7 @@ namespace YY_Games_Scripts
 
         #endregion
         #region Functions To Initilaze the spawned piece
-        private void Initialize()
+        public void Initialize()
         {
             gameBoard = FindObjectOfType<Board>();
             for (int i = 0; i < blocksInPiecePrefab.Length; i++)
