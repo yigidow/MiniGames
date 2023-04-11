@@ -667,21 +667,33 @@ namespace YY_Games_Scripts
                                 if (!boardGrid[i - 1, j].GetComponent<Grid>().hasBlock && !boardGrid[i + 1, j].GetComponent<Grid>().hasBlock
                                  && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
                                 {
-                                    Debug.Log("Alone");
+                                    if (!boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
+                                    {
+                                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
+                                        UpdateGrindCellInfos();
+                                    }
                                 }
                             }else if(i - 1 < 0)
                             {
                                 if (!boardGrid[i + 1, j].GetComponent<Grid>().hasBlock
                                 && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
                                 {
-                                    Debug.Log("Alone");
+                                    if (!boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
+                                    {
+                                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
+                                        UpdateGrindCellInfos();
+                                    };
                                 }
                             }else if (i + 1 >= columns) 
                             {
                                 if (!boardGrid[i - 1, j].GetComponent<Grid>().hasBlock
                                 && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
                                 {
-                                    Debug.Log("Alone");
+                                    if (!boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
+                                    {
+                                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
+                                        UpdateGrindCellInfos();
+                                    }
                                 }
                             }
                             //int k = 0;
@@ -716,6 +728,7 @@ namespace YY_Games_Scripts
                                 boardGrid[i, j].GetComponent<Grid>().colorCode = k;
                             }
                         }
+                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.localPosition = new Vector2(0, 0);
                     }
                     else
                     {
