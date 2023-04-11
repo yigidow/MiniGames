@@ -349,13 +349,13 @@ namespace YY_Games_Scripts
                 }
 
                 //Handling free fall
-                if (Time.time > stepTime)
-                {
-                    if (canMoveDown)
-                    {
-                        MoveVerticalFreeFall();
-                    }
-                }
+                //if (Time.time > stepTime)
+                //{
+                //    if (canMoveDown)
+                //    {
+                //        MoveVerticalFreeFall();
+                //    }
+                //}
             }
             LockPiece();
         }

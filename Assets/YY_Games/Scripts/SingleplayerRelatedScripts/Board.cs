@@ -36,7 +36,8 @@ namespace YY_Games_Scripts
         [Header("Next and Holded Pieces")]
         [SerializeField] private GameObject nextPiece;
         [SerializeField] private GameObject holdedPiece;
-        private bool isThereAPieceHolded;
+        private bool isThereAPieceHolded = false;
+        public bool canHoldPiece = true;
 
         [Header("Lists to hold match blocks")]
         private List<GameObject> matchColumns = new List<GameObject>();
@@ -53,7 +54,7 @@ namespace YY_Games_Scripts
             {
                 case 1:
                     blockDensity = 4;
-                    maxBlockCount = 2;
+                    maxBlockCount = 25;
                     break;
                 case 2:
                     blockDensity = 5;
@@ -190,6 +191,7 @@ namespace YY_Games_Scripts
         {
             if(spawnedPiece == null)
             {
+                canHoldPiece = true;
                 //Spawn the piece
                 spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
@@ -437,6 +439,7 @@ namespace YY_Games_Scripts
             {
                 FindMatchInColumns();
                 FindMatchInRows();
+                //StartCoroutine(LetPieceBlocksFell());
                 StartCoroutine(SpawnPiece());
                 StartCoroutine(ShowNextPiece());
             }
@@ -444,7 +447,7 @@ namespace YY_Games_Scripts
         private IEnumerator SpawnPiece()
         {
             yield return new WaitForSeconds(0.5f);
-
+            canHoldPiece = true;
             if (spawnedPiece == null)
             {
                 //Spawn the piece
@@ -644,6 +647,85 @@ namespace YY_Games_Scripts
             }
         }
         #endregion
+        #region Functions after finding matches
+        public void LetPieceBlocksFell()
+        {
+            for (int i = 0; i < columns; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    if (boardGrid[i, j].GetComponent<Grid>().hasBlock)
+                    {
+                        if (boardGrid[i, j].transform.GetChild(0).gameObject.tag == ("PieceBlock"))
+                        {
+                            var temp = boardGrid[i, j].transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+                            temp.a = 0.5f;
+                            boardGrid[i, j].transform.GetChild(0).GetComponent<SpriteRenderer>().color = temp;
+
+                            if(i - 1 >= 0 && i + 1 < columns)
+                            {
+                                if (!boardGrid[i - 1, j].GetComponent<Grid>().hasBlock && !boardGrid[i + 1, j].GetComponent<Grid>().hasBlock
+                                 && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
+                                {
+                                    Debug.Log("Alone");
+                                }
+                            }else if(i - 1 < 0)
+                            {
+                                if (!boardGrid[i + 1, j].GetComponent<Grid>().hasBlock
+                                && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
+                                {
+                                    Debug.Log("Alone");
+                                }
+                            }else if (i + 1 >= columns) 
+                            {
+                                if (!boardGrid[i - 1, j].GetComponent<Grid>().hasBlock
+                                && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
+                                {
+                                    Debug.Log("Alone");
+                                }
+                            }
+                            //int k = 0;
+                            //if (k <= j)
+                            //{
+                            //    if (!boardGrid[i, j - k-1].GetComponent<Grid>().hasBlock)
+                            //    {
+                            //        boardGrid[i, j - k].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - k - 1].GetComponent<Grid>().transform);
+                            //        UpdateGrindCellInfos();
+                            //        boardGrid[i, j - k - 1].transform.GetChild(0).gameObject.transform.localPosition = new Vector2(0, 0);
+                            //        k++;
+                            //    }
+                            //}
+                        }
+                    }
+                }
+            }
+        }
+        public void UpdateGrindCellInfos()
+        {
+            for (int i = 0; i < columns; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    if (boardGrid[i, j].GetComponent<Grid>().transform.childCount > 0)
+                    {
+                        boardGrid[i, j].GetComponent<Grid>().hasBlock = true;
+                        for (int k = 0; k < boxColorCount; k++)
+                        {
+                            if (boardGrid[i, j].transform.GetChild(0).GetComponent<SpriteRenderer>().sprite == blocks[k].GetComponent<SpriteRenderer>().sprite)
+                            {
+                                boardGrid[i, j].GetComponent<Grid>().colorCode = k;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        boardGrid[i, j].GetComponent<Grid>().hasBlock = false;
+                        boardGrid[i, j].GetComponent<Grid>().colorCode = -1;
+                    }
+                }
+            }
+        }
+        #endregion
         #region Unity Functions
         private void Awake()
         {
@@ -667,13 +749,14 @@ namespace YY_Games_Scripts
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (!isThereAPieceHolded)
+                if (!isThereAPieceHolded && canHoldPiece)
                 {
                     HoldSpawnedPiece();
                 }
                 else
                 {
                     GetHoldedPiece();
+                    canHoldPiece = false;
                 }
             }
         }
