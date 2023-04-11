@@ -32,6 +32,7 @@ namespace YY_Games_Scripts
         [SerializeField] private GameObject spawnedPiece;
         private Vector2 spawnedPiecePos;
         private float pieceSpeed;
+        public bool canSpawnNewPiece = true;
 
         [Header("Next and Holded Pieces")]
         [SerializeField] private GameObject nextPiece;
@@ -439,7 +440,7 @@ namespace YY_Games_Scripts
             {
                 FindMatchInColumns();
                 FindMatchInRows();
-                //StartCoroutine(LetPieceBlocksFell());
+                StartCoroutine(LetPieceBlocksFell());
                 StartCoroutine(SpawnPiece());
                 StartCoroutine(ShowNextPiece());
             }
@@ -648,8 +649,9 @@ namespace YY_Games_Scripts
         }
         #endregion
         #region Functions after finding matches
-        public void LetPieceBlocksFell()
+        public IEnumerator LetPieceBlocksFell()
         {
+            yield return new WaitForSeconds(0.5f);
             for (int i = 0; i < columns; i++)
             {
                 for (int j = 0; j < rows; j++)
@@ -662,55 +664,40 @@ namespace YY_Games_Scripts
                             temp.a = 0.5f;
                             boardGrid[i, j].transform.GetChild(0).GetComponent<SpriteRenderer>().color = temp;
 
-                            if(i - 1 >= 0 && i + 1 < columns)
+                            if(i - 1 >= 0 && i + 1 < columns && j>=1)
                             {
                                 if (!boardGrid[i - 1, j].GetComponent<Grid>().hasBlock && !boardGrid[i + 1, j].GetComponent<Grid>().hasBlock
-                                 && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
+                                 && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
                                 {
-                                    if (!boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
-                                    {
-                                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
-                                        UpdateGrindCellInfos();
-                                    }
+                                    boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
+                                    UpdateGrindCellInfos();
+                                    yield return new WaitForSeconds(0.25f);
                                 }
-                            }else if(i - 1 < 0)
+                            }else if(i - 1 < 0 && j >= 1)
                             {
                                 if (!boardGrid[i + 1, j].GetComponent<Grid>().hasBlock
-                                && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
+                                && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
                                 {
-                                    if (!boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
-                                    {
-                                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
-                                        UpdateGrindCellInfos();
-                                    };
+                                    boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
+                                    UpdateGrindCellInfos();
+                                    yield return new WaitForSeconds(0.25f);
                                 }
-                            }else if (i + 1 >= columns) 
+                            }else if (i + 1 >= columns && j >= 1) 
                             {
                                 if (!boardGrid[i - 1, j].GetComponent<Grid>().hasBlock
-                                && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock && !boardGrid[i, j + 1].GetComponent<Grid>().hasBlock)
+                                && !boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
                                 {
-                                    if (!boardGrid[i, j - 1].GetComponent<Grid>().hasBlock)
-                                    {
-                                        boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
-                                        UpdateGrindCellInfos();
-                                    }
+                                    boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
+                                    UpdateGrindCellInfos();
+                                    yield return new WaitForSeconds(0.25f);
                                 }
                             }
-                            //int k = 0;
-                            //if (k <= j)
-                            //{
-                            //    if (!boardGrid[i, j - k-1].GetComponent<Grid>().hasBlock)
-                            //    {
-                            //        boardGrid[i, j - k].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - k - 1].GetComponent<Grid>().transform);
-                            //        UpdateGrindCellInfos();
-                            //        boardGrid[i, j - k - 1].transform.GetChild(0).gameObject.transform.localPosition = new Vector2(0, 0);
-                            //        k++;
-                            //    }
-                            //}
                         }
                     }
                 }
             }
+            FindMatchInColumns();
+            FindMatchInRows();
         }
         public void UpdateGrindCellInfos()
         {
