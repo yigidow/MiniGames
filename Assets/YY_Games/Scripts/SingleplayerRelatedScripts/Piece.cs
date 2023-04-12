@@ -57,7 +57,10 @@ namespace YY_Games_Scripts
             {
                 blocksInPiece[i] = Instantiate(blocksInPiecePrefab[i], (Vector3)blockPositions[i].position, Quaternion.identity, blocksInPieceParent.transform);
                 blocksInPiece[i].gameObject.tag = ("PieceBlock");
+                blocksInPiece[i].AddComponent<PieceBlock>();
             }
+            blocksInPiece[0].GetComponent<PieceBlock>().myBuddy = blocksInPiece[1];
+            blocksInPiece[1].GetComponent<PieceBlock>().myBuddy = blocksInPiece[0];
         }
         #endregion
         #region Function to Handle Movement and Rotation of Piece
