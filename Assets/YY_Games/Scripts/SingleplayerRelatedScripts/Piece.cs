@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace YY_Games_Scripts
 {
-    public class Piece : MonoBehaviour
+   public class Piece : MonoBehaviour
     {
         #region Variables and References
         [Header("Board")]
@@ -280,7 +280,6 @@ namespace YY_Games_Scripts
             }
         }
         #endregion
-
         #region Functions to Interact with board
         public void LockPiece()
         {

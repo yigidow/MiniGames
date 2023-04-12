@@ -447,7 +447,7 @@ namespace YY_Games_Scripts
         }
         private IEnumerator SpawnPiece()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.7f);
             canHoldPiece = true;
             if (spawnedPiece == null)
             {
@@ -469,7 +469,7 @@ namespace YY_Games_Scripts
         #region Functions to Shown next piece comming and holding a piece
         private IEnumerator ShowNextPiece()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.5f);
             for (int i = 0; i < nextPiece.GetComponent<NextPiece>().blocksInNextPiece.Length; i++)
             {
                 int rand = Random.Range(0, boxColorCount);
