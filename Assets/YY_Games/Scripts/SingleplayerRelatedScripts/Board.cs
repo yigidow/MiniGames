@@ -7,14 +7,17 @@ namespace YY_Games_Scripts
     public class Board : MonoBehaviour
     {
         #region Variables and References
+        public static Board instance;
         [Header("Game Values")]
-        [SerializeField] private static int rows = 20;
-        [SerializeField] private static int columns = 10;
         private int difficulty;
         private int density;
         private float speed;
+        public bool isStageCleared;
+        private bool isGameLost;
 
         [Header("Board Grid Components")]
+        [SerializeField] private static int rows = 20;
+        [SerializeField] private static int columns = 10;
         [SerializeField] private GameObject gridCell;
         [SerializeField] private Transform gridStartPos;
         [SerializeField] private GameObject gridParent;
@@ -37,7 +40,7 @@ namespace YY_Games_Scripts
         [Header("Next and Holded Pieces")]
         [SerializeField] private GameObject nextPiece;
         [SerializeField] private GameObject holdedPiece;
-        private bool isThereAPieceHolded = false;
+        public bool isThereAPieceHolded = false;
         public bool canHoldPiece = true;
 
         [Header("Lists to hold match blocks")]
@@ -45,7 +48,6 @@ namespace YY_Games_Scripts
         private List<GameObject> matchRows = new List<GameObject>();
         #endregion
         #region Functions to set up the board at start
-
         private void SetUpGameSettings()
         {
             difficulty = PlayerPrefs.GetInt("gameDifficulty");
@@ -55,7 +57,7 @@ namespace YY_Games_Scripts
             {
                 case 1:
                     blockDensity = 4;
-                    maxBlockCount = 25;
+                    maxBlockCount = 1;
                     break;
                 case 2:
                     blockDensity = 5;
@@ -192,7 +194,6 @@ namespace YY_Games_Scripts
         {
             if(spawnedPiece == null)
             {
-                canHoldPiece = true;
                 //Spawn the piece
                 spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
@@ -442,6 +443,7 @@ namespace YY_Games_Scripts
                 FindMatchInRows();
                 StartCoroutine(LetPieceBlocksFell());
                 StartCoroutine(SpawnPiece());
+                StageCleared();
                 StartCoroutine(ShowNextPiece());
             }
         }
@@ -449,7 +451,7 @@ namespace YY_Games_Scripts
         {
             yield return new WaitForSeconds(0.7f);
             canHoldPiece = true;
-            if (spawnedPiece == null)
+            if (spawnedPiece == null && !isStageCleared)
             {
                 //Spawn the piece
                 spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
@@ -469,13 +471,16 @@ namespace YY_Games_Scripts
         #region Functions to Shown next piece comming and holding a piece
         private IEnumerator ShowNextPiece()
         {
-            yield return new WaitForSeconds(0.5f);
-            for (int i = 0; i < nextPiece.GetComponent<NextPiece>().blocksInNextPiece.Length; i++)
+            if (!isStageCleared)
             {
-                int rand = Random.Range(0, boxColorCount);
-                nextPiece.GetComponent<NextPiece>().blocksInNextPiece[i] = blocks[rand];
+                yield return new WaitForSeconds(1f);
+                for (int i = 0; i < nextPiece.GetComponent<NextPiece>().blocksInNextPiece.Length; i++)
+                {
+                    int rand = Random.Range(0, boxColorCount);
+                    nextPiece.GetComponent<NextPiece>().blocksInNextPiece[i] = blocks[rand];
+                }
+                nextPiece.GetComponent<NextPiece>().Init();
             }
-            nextPiece.GetComponent<NextPiece>().Init();
         }
         private void HoldSpawnedPiece()
         {
@@ -493,12 +498,13 @@ namespace YY_Games_Scripts
         }
         private void GetHoldedPiece()
         {
-            if(spawnedPiece != null)
+            if(spawnedPiece != null && !isStageCleared)
             {
                 for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
                 {
                     spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = holdedPiece.GetComponent<HoldedPiece>().blocksInHoldedPiece[i];
                     Destroy(spawnedPiece.GetComponent<Piece>().blocksInPiece[i]);
+                    holdedPiece.GetComponent<HoldedPiece>().blocksInHoldedPiece[i] = null;
                 }
                 spawnedPiece.GetComponent<Piece>().Initialize();
                 holdedPiece.SetActive(false);
@@ -672,7 +678,7 @@ namespace YY_Games_Scripts
                                 {
                                     boardGrid[i, j].transform.GetChild(0).gameObject.transform.SetParent(boardGrid[i, j - 1].GetComponent<Grid>().transform);
                                     UpdateGrindCellInfos();
-                                    yield return new WaitForSeconds(0.25f);
+                                    yield return new WaitForSeconds(0.5f);
                                 }
                             }
                         }
@@ -709,10 +715,39 @@ namespace YY_Games_Scripts
             }
         }
         #endregion
+        #region Functions for losing or winning the level
+        public void StageCleared()
+        {
+           int currentBlockCount = 0;
+           foreach (GameObject grid in boardGrid)
+            {
+                if (grid.GetComponent<Grid>().hasBlock && grid.transform.GetChild(0).gameObject.tag == ("Block"))
+                {
+                    currentBlockCount++;
+                }
+            }
+           if(currentBlockCount <= 0)
+            {
+                isStageCleared = true;
+                return;
+            }
+        }
+        
+        #endregion
         #region Unity Functions
         private void Awake()
         {
             SetUpGameSettings();
+
+            if (instance == null)
+            {
+                instance = this;
+            }
+            else if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+            
         }
         void Start()
         {
@@ -720,7 +755,6 @@ namespace YY_Games_Scripts
             FixRowBoxColour();
             FillUpBoardRandomly();
             SpawnPieceAtStart();
-
             StartCoroutine(ShowNextPiece());
         }
 
@@ -732,11 +766,12 @@ namespace YY_Games_Scripts
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (!isThereAPieceHolded && canHoldPiece)
+                if (canHoldPiece)
                 {
                     HoldSpawnedPiece();
+                    isThereAPieceHolded = true;
                 }
-                else
+                else if(isThereAPieceHolded)
                 {
                     GetHoldedPiece();
                     canHoldPiece = false;
