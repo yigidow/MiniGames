@@ -37,6 +37,7 @@ namespace YY_Games_Scripts
         public bool canRotateToVertical = true;
 
         public bool isPieceLocked = false;
+        public bool isPieceFromHold = false;
 
         public enum PiecePositions
         {

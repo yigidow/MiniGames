@@ -11,14 +11,18 @@ namespace YY_Games_Scripts
     {
         #region Variables and References
         public static GameManager instance;
+        [Header("UI Elemenets")]
         [SerializeField] private TMP_Text gameTimer;
         [SerializeField] private Button backButton;
 
+        [Header("Variables for stage clearence")]
         [SerializeField] private GameObject winScreen;
         [SerializeField] private TMP_Text gameWonTimeShown;
+        public int winTimeRecordInSeconds;
+
+        [Header("Variables for stage lost")]
         [SerializeField] private GameObject loseScreen;
 
-        public int winTimeRecordInSeconds;
 
         #endregion
 
@@ -62,7 +66,7 @@ namespace YY_Games_Scripts
             else
             {
                 winScreen.SetActive(true);
-                gameWonTimeShown.text = gameTimer.text;
+                gameWonTimeShown.text = "Clear time: " + gameTimer.text;
             }
         }
         #endregion

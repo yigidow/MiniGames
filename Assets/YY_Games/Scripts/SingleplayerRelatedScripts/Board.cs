@@ -8,20 +8,21 @@ namespace YY_Games_Scripts
     {
         #region Variables and References
         public static Board instance;
+
         [Header("Game Values")]
+        public bool isStageCleared;
+        public bool isGameLost;
         private int difficulty;
         private int density;
         private float speed;
-        public bool isStageCleared;
-        private bool isGameLost;
 
         [Header("Board Grid Components")]
-        [SerializeField] private static int rows = 20;
-        [SerializeField] private static int columns = 10;
-        [SerializeField] private GameObject gridCell;
+        public GameObject gridCell;
+        public GameObject[,] boardGrid = new GameObject[columns, rows];
         [SerializeField] private Transform gridStartPos;
         [SerializeField] private GameObject gridParent;
-        public GameObject[,] boardGrid = new GameObject[columns, rows];
+        [SerializeField] private static int rows = 20;
+        [SerializeField] private static int columns = 10;
 
         [Header("Block Variables")]
         [SerializeField] private List<GameObject> blocks = new List<GameObject>();
@@ -41,7 +42,6 @@ namespace YY_Games_Scripts
         [SerializeField] private GameObject nextPiece;
         [SerializeField] private GameObject holdedPiece;
         public bool isThereAPieceHolded = false;
-        public bool canHoldPiece = true;
 
         [Header("Lists to hold match blocks")]
         private List<GameObject> matchColumns = new List<GameObject>();
@@ -450,7 +450,6 @@ namespace YY_Games_Scripts
         private IEnumerator SpawnPiece()
         {
             yield return new WaitForSeconds(0.7f);
-            canHoldPiece = true;
             if (spawnedPiece == null && !isStageCleared)
             {
                 //Spawn the piece
@@ -484,7 +483,7 @@ namespace YY_Games_Scripts
         }
         private void HoldSpawnedPiece()
         {
-            if (spawnedPiece != null)
+            if (spawnedPiece != null && !isStageCleared && spawnedPiece.GetComponent<Piece>().isPieceFromHold == false)
             {
                 holdedPiece.SetActive(true);
                 for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
@@ -498,7 +497,7 @@ namespace YY_Games_Scripts
         }
         private void GetHoldedPiece()
         {
-            if(spawnedPiece != null && !isStageCleared)
+            if(spawnedPiece != null && !isStageCleared && spawnedPiece.GetComponent<Piece>().isPieceFromHold == false)
             {
                 for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiece.Length; i++)
                 {
@@ -507,6 +506,7 @@ namespace YY_Games_Scripts
                     holdedPiece.GetComponent<HoldedPiece>().blocksInHoldedPiece[i] = null;
                 }
                 spawnedPiece.GetComponent<Piece>().Initialize();
+                spawnedPiece.GetComponent<Piece>().isPieceFromHold = true;
                 holdedPiece.SetActive(false);
                 isThereAPieceHolded = false;
             }
@@ -766,15 +766,13 @@ namespace YY_Games_Scripts
 
             if (Input.GetKeyDown(KeyCode.LeftShift))
             {
-                if (canHoldPiece)
+                if (!isThereAPieceHolded)
                 {
                     HoldSpawnedPiece();
-                    isThereAPieceHolded = true;
                 }
                 else if(isThereAPieceHolded)
                 {
                     GetHoldedPiece();
-                    canHoldPiece = false;
                 }
             }
         }
