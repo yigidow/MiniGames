@@ -59,14 +59,18 @@ namespace YY_Games_Scripts
 
         void Update()
         {
-            if(Board.instance.isStageCleared == false)
+            if(Board.instance.isStageCleared == false && Board.instance.isGameLost == false)
             {
                 SetGameTimer();
             }
-            else
+            else if (Board.instance.isStageCleared == true)
             {
                 winScreen.SetActive(true);
                 gameWonTimeShown.text = "Clear time: " + gameTimer.text;
+            }
+            else if (Board.instance.isGameLost == true)
+            {
+                loseScreen.SetActive(true);
             }
         }
         #endregion

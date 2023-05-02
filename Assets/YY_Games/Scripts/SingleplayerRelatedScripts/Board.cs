@@ -452,25 +452,32 @@ namespace YY_Games_Scripts
             yield return new WaitForSeconds(0.7f);
             if (spawnedPiece == null && !isStageCleared)
             {
-                //Spawn the piece
-                spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
-
-                //Set piece according to next Piece
-                for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
+                if (!boardGrid[4, 19].GetComponent<Grid>().hasBlock || !boardGrid[5, 19].GetComponent<Grid>().hasBlock)
                 {
-                    int rand = Random.Range(0, boxColorCount);
-                    spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = nextPiece.GetComponent<NextPiece>().blocksInNextPiece[i];
-                }
+                    //Spawn the piece
+                    spawnedPiece = Instantiate(pieceToSpawn.gameObject, (Vector2)pieceSpawnPos.position, Quaternion.identity, gameObject.transform);
 
-                //Set the piece fall down speed
-                spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+                    //Set piece according to next Piece
+                    for (int i = 0; i < spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab.Length; i++)
+                    {
+                        int rand = Random.Range(0, boxColorCount);
+                        spawnedPiece.GetComponent<Piece>().blocksInPiecePrefab[i] = nextPiece.GetComponent<NextPiece>().blocksInNextPiece[i];
+                    }
+
+                    //Set the piece fall down speed
+                    spawnedPiece.GetComponent<Piece>().stepDelay = pieceSpeed;
+                }
+                else
+                {
+                    isGameLost = true;
+                }
             }
         }
         #endregion
         #region Functions to Shown next piece comming and holding a piece
         private IEnumerator ShowNextPiece()
         {
-            if (!isStageCleared)
+            if (!isStageCleared && !isGameLost)
             {
                 yield return new WaitForSeconds(1f);
                 for (int i = 0; i < nextPiece.GetComponent<NextPiece>().blocksInNextPiece.Length; i++)
